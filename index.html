@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mô Phỏng Routing &amp; ARP — Bản Trình Chiếu Lớp Học</title>
+  <style>
+    :root {
+      --bg-main: #070b14;
+      --bg-panel: #0f172a;
+      --bg-card: #1e293b;
+      --border: rgba(148, 163, 184, 0.22);
+
+      --text-white: #ffffff;
+      --text-light: #e2e8f0;
+      --text-muted: #94a3b8;
+
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.45);
+      --amber: #fbbf24;
+      --amber-glow: rgba(251, 191, 36, 0.45);
+      --emerald: #34d399;
+      --emerald-glow: rgba(52, 211, 153, 0.45);
+      --purple: #c084fc;
+      --purple-glow: rgba(192, 132, 252, 0.45);
+
+      --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Consolas', 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      background-image: radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.08), transparent 60%);
+      color: var(--text-white);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 22px;
+      gap: 14px;
+    }
+
+    /* ================= 1. THANH ĐIỀU KHIỂN TRÊN CÙNG (TO & RÕ) ================= */
+    .top-bar {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .step-badge {
+      background: var(--cyan);
+      color: #070b14;
+      font-weight: 900;
+      font-size: 1.15rem;
+      padding: 6px 16px;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+
+    .step-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-white);
+    }
+
+    .controls-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--bg-card);
+      color: var(--text-white);
+      border: 2px solid rgba(148, 163, 184, 0.3);
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--cyan);
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: var(--cyan);
+      box-shadow: 0 0 18px rgba(37, 99, 235, 0.5);
+      padding: 10px 26px;
+      font-size: 1.18rem;
+    }
+
+    .btn-play.playing {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+
+    .speed-box {
+      display: flex;
+      background: #090e1a;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .speed-btn {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      background: var(--bg-card);
+      color: var(--cyan);
+    }
+
+    /* ================= 2. BỐ CỤC CHÍNH: SƠ ĐỒ MẠNG + BẢNG KIỂM TRA ================= */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 16px;
+      flex: 1;
+    }
+
+    @media (max-width: 1200px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ================= SƠ ĐỒ TRÊN BẢNG (TRÁI) ================= */
+    .board-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      position: relative;
+    }
+
+    /* Sân khấu chứa 4 thiết bị */
+    .stage {
+      position: relative;
+      height: 390px;
+      width: 100%;
+    }
+
+    .stage-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .cable-bg {
+      stroke: #334155;
+      stroke-width: 8;
+      stroke-linecap: round;
+    }
+
+    .cable-glow {
+      stroke: var(--cyan);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 14 14;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .cable-glow.active-data {
+      opacity: 1;
+      stroke: var(--cyan);
+      filter: drop-shadow(0 0 12px var(--cyan));
+      animation: flowAnim 0.7s linear infinite;
+    }
+
+    .cable-glow.active-arp {
+      opacity: 1;
+      stroke: var(--amber);
+      filter: drop-shadow(0 0 12px var(--amber));
+      animation: flowAnim 0.55s linear infinite;
+    }
+
+    @keyframes flowAnim {
+      to { stroke-dashoffset: -28; }
+    }
+
+    /* Sóng loa Broadcast */
+    .ripple-wave {
+      position: absolute;
+      top: 195px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid var(--amber);
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .ripple-wave.show {
+      animation: ripplePulse 1.3s ease-out infinite;
+    }
+
+    @keyframes ripplePulse {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
+    }
+
+    /* Gói tin di chuyển (To, Rõ) */
+    .moving-pkt {
+      position: absolute;
+      top: 195px;
+      left: 12%;
+      transform: translate(-50%, -50%);
+      z-index: 25;
+      padding: 10px 18px;
+      border-radius: 14px;
+      background: #090d16;
+      border: 3px solid var(--cyan);
+      box-shadow: 0 0 28px var(--cyan-glow);
+      font-weight: 800;
+      font-size: 1.15rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .moving-pkt.show {
+      opacity: 1;
+    }
+
+    .moving-pkt.arp-style {
+      border-color: var(--amber);
+      color: var(--amber);
+      box-shadow: 0 0 28px var(--amber-glow);
+    }
+
+    .moving-pkt.data-style {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 28px var(--cyan-glow);
+    }
+
+    /* Thiết bị mạng (PC-A, R1, R2, PC-C) */
+    .node {
+      position: absolute;
+      top: 145px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 210px;
+      z-index: 10;
+    }
+
+    .node-pca { left: 11%; }
+    .node-r1  { left: 37%; }
+    .node-r2  { left: 63%; }
+    .node-pcc { left: 89%; }
+
+    /* Bong bóng lời thoại (Chữ to cho người ngồi dưới đọc rõ) */
+    .bubble {
+      position: absolute;
+      bottom: calc(100% + 16px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      width: 240px;
+      background: #1e293b;
+      border: 3px solid var(--cyan);
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.38;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 30;
+    }
+
+    .bubble.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .bubble.b-arp { border-color: var(--amber); }
+    .bubble.b-route { border-color: var(--purple); }
+    .bubble.b-done { border-color: var(--emerald); }
+
+    .bubble::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: var(--cyan) transparent transparent transparent;
+    }
+    .bubble.b-arp::after { border-top-color: var(--amber); }
+    .bubble.b-route::after { border-top-color: var(--purple); }
+    .bubble.b-done::after { border-top-color: var(--emerald); }
+
+    /* Tránh tràn mép trái/phải */
+    .node-pca .bubble { left: 58%; }
+    .node-pca .bubble::after { left: 42%; }
+    .node-pcc .bubble { left: 42%; }
+    .node-pcc .bubble::after { left: 58%; }
+
+    .node-circle {
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      background: #162036;
+      border: 3px solid #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.7rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s ease;
+    }
+
+    .node-circle.router {
+      border-radius: 50%;
+    }
+
+    .node.active-cyan .node-circle {
+      border-color: var(--cyan);
+      box-shadow: 0 0 30px var(--cyan-glow);
+      transform: scale(1.08);
+    }
+
+    .node.active-amber .node-circle {
+      border-color: var(--amber);
+      box-shadow: 0 0 30px var(--amber-glow);
+      transform: scale(1.08);
+    }
+
+    .node.active-purple .node-circle {
+      border-color: var(--purple);
+      box-shadow: 0 0 30px var(--purple-glow);
+      transform: scale(1.08);
+    }
+
+    .node.active-emerald .node-circle {
+      border-color: var(--emerald);
+      box-shadow: 0 0 32px var(--emerald-glow);
+      transform: scale(1.1);
+    }
+
+    .node-title {
+      margin-top: 8px;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .node-tag {
+      margin-top: 4px;
+      background: #0b1120;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    .node-ip-tag {
+      margin-top: 4px;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid var(--emerald);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--emerald);
+    }
+
+    /* Bảng Định Tuyến tại Router R1 */
+    .routing-box {
+      position: absolute;
+      bottom: 0;
+      left: 37%;
+      transform: translateX(-50%);
+      background: #171f36;
+      border: 2px solid var(--purple);
+      border-radius: 14px;
+      padding: 10px 18px;
+      text-align: center;
+      transition: all 0.25s ease;
+      z-index: 15;
+    }
+
+    .routing-box.glow {
+      background: rgba(192, 132, 252, 0.22);
+      box-shadow: 0 0 30px var(--purple-glow);
+      transform: translateX(-50%) scale(1.08);
+    }
+
+    .routing-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--purple);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .routing-rule {
+      font-family: var(--font-mono);
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Thanh tầng vật lý dưới cùng: Frame -> Bits -> Signals */
+    .layers-bar {
+      background: #090e1a;
+      border: 2px solid rgba(56, 189, 248, 0.3);
+      border-radius: 14px;
+      padding: 12px 18px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .layer-box {
+      background: var(--bg-card);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .layer-box.active {
+      border-color: var(--cyan);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+    }
+
+    .layer-name {
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .layer-val {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-light);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .layer-arrow {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--cyan);
+    }
+
+    .wave-svg {
+      width: 200%;
+      height: 26px;
+      stroke: var(--cyan);
+      stroke-width: 3;
+      fill: none;
+    }
+
+    .wave-svg.moving {
+      animation: waveMove 1s linear infinite;
+    }
+
+    @keyframes waveMove {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ================= 3. CỘT PHẢI: SO SÁNH IP ĐÍCH & MAC ĐÍCH (CHỮ CỰC TO) ================= */
+    .inspector-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .panel-heading {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-white);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .big-card {
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-ip {
+      background: rgba(56, 189, 248, 0.12);
+      border: 3px solid var(--cyan);
+    }
+
+    .card-mac {
+      background: rgba(251, 191, 36, 0.14);
+      border: 3px solid var(--amber);
+      transition: transform 0.25s ease;
+    }
+
+    .card-mac.pulse {
+      animation: macFlash 0.55s ease;
+    }
+
+    @keyframes macFlash {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.04); box-shadow: 0 0 30px var(--amber-glow); }
+      100% { transform: scale(1); }
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-label {
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .badge-rule {
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .big-value {
+      font-family: var(--font-mono);
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .card-desc {
+      font-size: 1.05rem;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+
+    /* Thanh tóm tắt các chặng đổi MAC */
+    .mac-steps-summary {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .summary-item {
+      font-size: 1.02rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+    }
+
+    .summary-item.active {
+      background: rgba(251, 191, 36, 0.22);
+      color: #fff;
+      border: 1px solid var(--amber);
+    }
+
+    .summary-item.done {
+      color: var(--emerald);
+    }
+
+    /* ================= 4. HỘP GIẢI THÍCH DỄ HIỂU BÊN DƯỚI (CHỮ TO RÕ) ================= */
+    .teacher-box {
+      background: linear-gradient(90deg, rgba(251, 191, 36, 0.14), rgba(15, 23, 42, 0.95));
+      border: 2px solid var(--amber);
+      border-left: 8px solid var(--amber);
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .teacher-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+
+    .teacher-text {
+      font-size: 1.25rem;
+      line-height: 1.45;
+      color: #fff;
+    }
+
+    .teacher-text strong {
+      color: var(--amber);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. THANH ĐIỀU KHIỂN -->
+  <header class="top-bar">
+    <div class="step-header">
+      <span id="stepBadge" class="step-badge">BƯỚC 1 / 7</span>
+      <h1 id="stepTitle" class="step-title">Khởi đầu tại PC-A</h1>
+    </div>
+
+    <div class="controls-row">
+      <button id="btnReset" class="btn" title="Làm lại từ đầu">⏮ Làm lại</button>
+      <button id="btnPrev" class="btn" title="Bước trước">◀ Lùi</button>
+      <button id="btnPlay" class="btn btn-play" title="Tự động chạy">▶ Tự chạy</button>
+      <button id="btnNext" class="btn btn-next" title="Bước tiếp theo">Tiếp theo ▶</button>
+
+      <div class="speed-box">
+        <button class="speed-btn" data-speed="slow">Chậm</button>
+        <button class="speed-btn active" data-speed="normal">Vừa</button>
+        <button class="speed-btn" data-speed="fast">Nhanh</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. KHU VỰC MÔ PHỎNG CHÍNH -->
+  <main class="main-grid">
+
+    <!-- BẢNG TRẮNG SƠ ĐỒ MẠNG -->
+    <section class="board-panel">
+      <div class="stage">
+        <!-- Dây mạng SVG -->
+        <svg class="stage-svg" viewBox="0 0 1000 390" preserveAspectRatio="none">
+          <line x1="110" y1="195" x2="370" y2="195" class="cable-bg" />
+          <line x1="370" y1="195" x2="630" y2="195" class="cable-bg" />
+          <line x1="630" y1="195" x2="890" y2="195" class="cable-bg" />
+
+          <line id="glow1" x1="110" y1="195" x2="370" y2="195" class="cable-glow" />
+          <line id="glow2" x1="370" y1="195" x2="630" y2="195" class="cable-glow" />
+          <line id="glow3" x1="630" y1="195" x2="890" y2="195" class="cable-glow" />
+        </svg>
+
+        <!-- Sóng Broadcast -->
+        <div id="rippleWave" class="ripple-wave"></div>
+
+        <!-- Gói tin di chuyển -->
+        <div id="movingPkt" class="moving-pkt">📦 Gói tin</div>
+
+        <!-- PC-A -->
+        <div id="nodePCA" class="node node-pca">
+          <div id="bubblePCA" class="bubble"></div>
+          <div class="node-circle">💻</div>
+          <div class="node-title">PC-A (Nguồn)</div>
+          <div class="node-tag">MAC: AA-01</div>
+        </div>
+
+        <!-- Router R1 -->
+        <div id="nodeR1" class="node node-r1">
+          <div id="bubbleR1" class="bubble"></div>
+          <div class="node-circle router">🧭</div>
+          <div class="node-title">Router R1</div>
+          <div class="node-tag">MAC: R1-MAC</div>
+        </div>
+
+        <!-- Router R2 -->
+        <div id="nodeR2" class="node node-r2">
+          <div id="bubbleR2" class="bubble"></div>
+          <div class="node-circle router">🧭</div>
+          <div class="node-title">Router R2</div>
+          <div class="node-tag">MAC: R2-MAC</div>
+        </div>
+
+        <!-- PC-C -->
+        <div id="nodePCC" class="node node-pcc">
+          <div id="bubblePCC" class="bubble"></div>
+          <div class="node-circle">🖥️</div>
+          <div class="node-title">PC-C (Đích)</div>
+          <div class="node-ip-tag">IP: 172.10.20.5 (/24)</div>
+          <div class="node-tag">MAC: PC-C-MAC</div>
+        </div>
+
+        <!-- Bảng Định Tuyến tại R1 -->
+        <div id="routingBox" class="routing-box">
+          <div class="routing-title">🗺️ Bảng Định Tuyến (Router R1)</div>
+          <div class="routing-rule">Mạng 172.10.20.0/24 ➔ Đi tiếp: R2</div>
+        </div>
+      </div>
+
+      <!-- Thanh Encapsulation: Frame -> Bits -> Signals -->
+      <div class="layers-bar">
+        <div id="boxFrame" class="layer-box active">
+          <div class="layer-name" style="color: var(--amber);">1. Frame (Đóng gói)</div>
+          <div id="txtFrame" class="layer-val">[MAC: ???] + [IP: 172.10.20.5]</div>
+        </div>
+
+        <div class="layer-arrow">➔</div>
+
+        <div id="boxBits" class="layer-box">
+          <div class="layer-name" style="color: var(--emerald);">2. Bits (Nhị phân)</div>
+          <div id="txtBits" class="layer-val">10110010 01011101 11001010</div>
+        </div>
+
+        <div class="layer-arrow">➔</div>
+
+        <div id="boxSignals" class="layer-box">
+          <div class="layer-name" style="color: var(--cyan);">3. Signals (Xung điện)</div>
+          <div style="overflow: hidden; height: 26px;">
+            <svg id="waveSvg" class="wave-svg" viewBox="0 0 400 26" preserveAspectRatio="none">
+              <path d="M 0 13 L 20 13 L 20 4 L 45 4 L 45 22 L 70 22 L 70 4 L 100 4 L 100 22 L 130 22 L 130 4 L 160 4 L 160 22 L 200 22 L 220 13 L 220 4 L 245 4 L 245 22 L 270 22 L 270 4 L 300 4 L 300 22 L 330 22 L 330 4 L 360 4 L 360 22 L 400 22" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CỘT PHẢI: BẢNG SO SÁNH IP ĐÍCH & MAC ĐÍCH -->
+    <aside class="inspector-panel">
+      <div class="panel-heading">🔎 Bên Trong Gói Tin Hiện Tại</div>
+
+      <!-- THẺ 1: IP ĐÍCH (KHÔNG ĐỔI) -->
+      <div class="big-card card-ip">
+        <div class="card-top">
+          <span class="card-label" style="color: var(--cyan);">🌐 IP Đích (Đích Cuối)</span>
+          <span class="badge-rule" style="background: rgba(56,189,248,0.2); color: var(--cyan);">🔒 KHÔNG BAO GIỜ ĐỔI</span>
+        </div>
+        <div class="big-value">172.10.20.5 (PC-C)</div>
+        <div class="card-desc">Giống như <strong>tên người nhận cuối cùng</strong> ghi cố định trên phong bì thư.</div>
+      </div>
+
+      <!-- THẺ 2: MAC ĐÍCH (ĐỔI MỖI CHẶNG) -->
+      <div id="macCard" class="big-card card-mac">
+        <div class="card-top">
+          <span class="card-label" style="color: var(--amber);">🏷️ MAC Đích (Người Cầm Kế Tiếp)</span>
+          <span class="badge-rule" style="background: rgba(251,191,36,0.25); color: var(--amber);">🔄 ĐỔI Ở MỖI CHẶNG</span>
+        </div>
+        <div id="valMac" class="big-value" style="color: var(--amber);">??? (Chưa biết)</div>
+        <div id="descMac" class="card-desc">PC-A chưa biết địa chỉ MAC của Router R1 nên cần hỏi qua ARP.</div>
+      </div>
+
+      <!-- TÓM TẮT HÀNH TRÌNH ĐỔI MAC -->
+      <div class="mac-steps-summary">
+        <div style="font-size: 0.95rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">
+          Hành trình thay đổi MAC Đích:
+        </div>
+        <div id="sum1" class="summary-item"><span>1. Hỏi ARP tìm R1</span><span>FF:FF:FF:FF:FF:FF</span></div>
+        <div id="sum2" class="summary-item"><span>2. Chặng 1 (PC-A ➔ R1)</span><span>R1-MAC</span></div>
+        <div id="sum3" class="summary-item"><span>3. Chặng 2 (R1 ➔ R2)</span><span>R2-MAC</span></div>
+        <div id="sum4" class="summary-item"><span>4. Hỏi ARP tìm PC-C</span><span>FF:FF:FF:FF:FF:FF</span></div>
+        <div id="sum5" class="summary-item"><span>5. Chặng cuối (R2 ➔ PC-C)</span><span>PC-C-MAC</span></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 3. GÓC GIẢI THÍCH BÌNH DÂN DỄ HIỂU -->
+  <footer class="teacher-box">
+    <div class="teacher-icon">💡</div>
+    <div id="teacherText" class="teacher-text">
+      Đang tải giải thích...
+    </div>
+  </footer>
+
+  <script>
+    const STEPS = [
+      {
+        title: "Chuẩn bị gửi tin tại PC-A",
+        activeNode: "PCA",
+        nodeColor: "active-cyan",
+        bubbles: {
+          PCA: { text: "💭 Cần gửi tin tới PC-C (172.10.20.5). Phải đưa qua Router R1, nhưng mình chưa biết MAC của R1!", style: "" }
+        },
+        motion: null,
+        r1Glow: false,
+        macVal: "??? (Chưa biết)",
+        macDesc: "PC-A chưa biết mặt (MAC) của Router R1 nên chưa thể gửi gói tin đi.",
+        frameTxt: "[MAC: ???] + [IP: 172.10.20.5]",
+        wireActive: false,
+        sumIdx: 0,
+        note: "<strong>Ví dụ thực tế (Biết Tên nhưng chưa biết Mặt):</strong> PC-A muốn gửi thư cho <strong>PC-C (172.10.20.5)</strong> ở phòng khác. Để gửi ra khỏi phòng, PC-A phải đưa thư cho lớp trưởng <strong>Router R1</strong>, nhưng PC-A chưa biết mặt (địa chỉ MAC) của R1."
+      },
+      {
+        title: "PC-A bắc loa ARP tìm Router R1",
+        activeNode: "PCA",
+        nodeColor: "active-amber",
+        bubbles: {
+          PCA: { text: "📢 [ARP Broadcast] Ai là Router R1 cho tôi xin địa chỉ MAC!", style: "b-arp" },
+          R1:  { text: "👋 Tôi đây! Địa chỉ MAC của R1 là R1-MAC!", style: "b-done" }
+        },
+        motion: { from: 17, to: 31, glow: "glow1", type: "arp", label: "📢 ARP: FF:FF:FF:FF:FF:FF", rippleAt: 11 },
+        r1Glow: false,
+        macVal: "FF:FF:FF:FF:FF:FF",
+        macDesc: "Địa chỉ Broadcast (hỏi toàn mạng nội bộ) để tìm xem ai là Router R1.",
+        frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Hỏi R1]",
+        wireActive: true,
+        sumIdx: 1,
+        note: "<strong>Bắc loa hỏi cả phòng (ARP Broadcast):</strong> Vì chưa biết mặt R1, PC-A dùng loa phóng thanh (<strong>FF:FF:FF:FF:FF:FF</strong>) hỏi cả phòng. Router R1 nghe thấy liền giơ tay trả lời: <em>'Mặt (MAC) của tôi là R1-MAC!'</em>"
+      },
+      {
+        title: "Chặng 1: Gửi gói tin từ PC-A đến Router R1",
+        activeNode: "PCA",
+        nodeColor: "active-cyan",
+        bubbles: {
+          PCA: { text: "📦 Đã biết MAC của R1! Đóng gói gửi cho R1 (MAC Đích = R1-MAC).", style: "" }
+        },
+        motion: { from: 17, to: 31, glow: "glow1", type: "data", label: "📦 MAC: R1-MAC | IP: 172.10.20.5" },
+        r1Glow: false,
+        macVal: "R1-MAC (Router R1)",
+        macDesc: "Đóng gói vào Frame gửi thẳng cho người cầm hộ đầu tiên là Router R1.",
+        frameTxt: "[MAC: R1-MAC] + [IP: 172.10.20.5]",
+        wireActive: true,
+        sumIdx: 2,
+        note: "<strong>Trao tay chặng 1 (Frame ➔ Bits ➔ Signals):</strong> Phong bì bên trong vẫn ghi <strong>IP Đích: 172.10.20.5</strong>, còn nhãn dán bên ngoài ghi <strong>MAC Đích: R1-MAC</strong>. Gói tin biến thành chuỗi bit 0-1 và xung điện chạy tới R1."
+      },
+      {
+        title: "Router R1 tra Bảng Định Tuyến (Routing Table)",
+        activeNode: "R1",
+        nodeColor: "active-purple",
+        bubbles: {
+          R1: { text: "🔍 Xem IP đích 172.10.20.5... Tra bảng: Mạng 172.10.20.0/24 ➔ Chuyển tiếp sang Router R2!", style: "b-route" }
+        },
+        motion: null,
+        r1Glow: true,
+        macVal: "Đang đổi sang R2...",
+        macDesc: "R1 bóc bỏ nhãn MAC cũ và tra Bảng Định Tuyến để tìm người nhận kế tiếp.",
+        frameTxt: "[Đang tra bảng định tuyến tại R1...]",
+        wireActive: false,
+        sumIdx: 2,
+        note: "<strong>Tra biển chỉ đường (Routing Table):</strong> R1 bóc bỏ nhãn MAC cũ rồi đọc <strong>IP Đích (172.10.20.5)</strong>. Nhìn vào <strong>Bảng Định Tuyến</strong> bên dưới, R1 thấy muốn tới mạng <strong>172.10.20.0/24</strong> thì phải đưa tiếp cho <strong>Router R2</strong>."
+      },
+      {
+        title: "Chặng 2: Chuyển gói tin từ Router R1 sang Router R2",
+        activeNode: "R1",
+        nodeColor: "active-cyan",
+        bubbles: {
+          R1: { text: "🏷️ Dán nhãn MAC mới của R2 (R2-MAC)! Giữ nguyên IP Đích 172.10.20.5!", style: "" }
+        },
+        motion: { from: 43, to: 57, glow: "glow2", type: "data", label: "📦 MAC: R2-MAC | IP: 172.10.20.5" },
+        r1Glow: false,
+        macVal: "R2-MAC (Router R2)",
+        macDesc: "Đổi sang MAC của Router R2 để gói tin đi qua dây cáp giữa R1 và R2.",
+        frameTxt: "[MAC: R2-MAC] + [IP: 172.10.20.5]",
+        wireActive: true,
+        sumIdx: 3,
+        note: "<strong>Quy tắc vàng — Đổi MAC, Giữ nguyên IP:</strong> R1 tuyệt đối <strong>không sửa IP Đích (172.10.20.5)</strong>, mà chỉ dán nhãn <strong>MAC Đích mới (R2-MAC)</strong> để chuyền gói tin sang cho Router R2."
+      },
+      {
+        title: "Router R2 bắc loa ARP tìm PC-C (172.10.20.5)",
+        activeNode: "R2",
+        nodeColor: "active-amber",
+        bubbles: {
+          R2:  { text: "📢 [ARP Broadcast] Đã tới mạng đích! Ai có IP 172.10.20.5 cho xin địa chỉ MAC?", style: "b-arp" },
+          PCC: { text: "🙋‍♂️ Tôi là 172.10.20.5 đây! MAC của tôi là PC-C-MAC!", style: "b-done" }
+        },
+        motion: { from: 69, to: 83, glow: "glow3", type: "arp", label: "📢 ARP: FF:FF:FF:FF:FF:FF", rippleAt: 63 },
+        r1Glow: false,
+        macVal: "FF:FF:FF:FF:FF:FF",
+        macDesc: "R2 phát loa Broadcast hỏi toàn mạng đích xem ai có IP 172.10.20.5.",
+        frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Hỏi 172.10.20.5]",
+        wireActive: true,
+        sumIdx: 4,
+        note: "<strong>Bắc loa ở phòng đích (ARP lần 2):</strong> R2 đã mang thư tới đúng phòng <strong>172.10.20.0/24</strong>, nhưng chưa biết mặt <strong>PC-C (172.10.20.5)</strong>. R2 lại bắc loa <strong>FF:FF:FF:FF:FF:FF</strong> hỏi, và PC-C giơ tay báo lại MAC là <strong>PC-C-MAC</strong>."
+      },
+      {
+        title: "Chặng cuối: Giao gói tin từ R2 đến tận tay PC-C! 🎉",
+        activeNode: "PCC",
+        nodeColor: "active-emerald",
+        bubbles: {
+          R2:  { text: "🚀 Dán MAC Đích = PC-C-MAC và chuyển tới PC-C!", style: "" },
+          PCC: { text: "🎉 Đã nhận được gói tin! Đúng MAC và đúng IP 172.10.20.5 của mình rồi!", style: "b-done" }
+        },
+        motion: { from: 69, to: 83, glow: "glow3", type: "data", label: "🎉 MAC: PC-C-MAC | IP: 172.10.20.5" },
+        r1Glow: false,
+        macVal: "PC-C-MAC (PC-C)",
+        macDesc: "Gói tin đã tới đích! MAC Đích đã đổi 5 lần, còn IP Đích giữ nguyên từ đầu đến cuối.",
+        frameTxt: "[MAC: PC-C-MAC] + [IP: 172.10.20.5]",
+        wireActive: true,
+        sumIdx: 5,
+        note: "<strong>TỔNG KẾT CỐT LÕI:</strong> Suốt hành trình từ PC-A đến PC-C, <strong>IP Đích (172.10.20.5) luôn giữ nguyên</strong> để định hướng đường đi, còn <strong>MAC Đích thay đổi ở từng chặng</strong> để trao tay gói tin qua từng thiết bị!"
+      }
+    ];
+
+    const SPEEDS = {
+      slow:   { move: 2200, wait: 4800 },
+      normal: { move: 1300, wait: 3200 },
+      fast:   { move: 700,  wait: 1800 }
+    };
+
+    let idx = 0;
+    let playing = false;
+    let speed = "normal";
+    let timer = null;
+    let animId = null;
+
+    const nodes = {
+      PCA: document.getElementById("nodePCA"),
+      R1:  document.getElementById("nodeR1"),
+      R2:  document.getElementById("nodeR2"),
+      PCC: document.getElementById("nodePCC")
+    };
+
+    const bubbles = {
+      PCA: document.getElementById("bubblePCA"),
+      R1:  document.getElementById("bubbleR1"),
+      R2:  document.getElementById("bubbleR2"),
+      PCC: document.getElementById("bubblePCC")
+    };
+
+    const glows = {
+      glow1: document.getElementById("glow1"),
+      glow2: document.getElementById("glow2"),
+      glow3: document.getElementById("glow3")
+    };
+
+    const movingPkt = document.getElementById("movingPkt");
+    const rippleWave = document.getElementById("rippleWave");
+    const routingBox = document.getElementById("routingBox");
+
+    function animatePacket(fromX, toX, duration) {
+      if (animId) cancelAnimationFrame(animId);
+      movingPkt.classList.add("show");
+      const start = performance.now();
+
+      function frame(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const ease = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        movingPkt.style.left = (fromX + (toX - fromX) * ease) + "%";
+        if (p < 1) animId = requestAnimationFrame(frame);
+      }
+      movingPkt.style.left = fromX + "%";
+      animId = requestAnimationFrame(frame);
+    }
+
+    function renderStep(newIdx) {
+      idx = Math.max(0, Math.min(STEPS.length - 1, newIdx));
+      const s = STEPS[idx];
+
+      document.getElementById("stepBadge").textContent = `BƯỚC ${idx + 1} / ${STEPS.length}`;
+      document.getElementById("stepTitle").textContent = s.title;
+      document.getElementById("btnPrev").disabled = idx === 0;
+      document.getElementById("btnNext").textContent = idx === STEPS.length - 1 ? "↺ Chạy lại từ đầu" : "Tiếp theo ▶";
+
+      // Nodes & Bubbles
+      Object.keys(nodes).forEach(k => {
+        nodes[k].className = `node node-${k.toLowerCase()}`;
+        bubbles[k].className = "bubble";
+        if (s.bubbles[k]) {
+          bubbles[k].textContent = s.bubbles[k].text;
+          bubbles[k].classList.add("show");
+          if (s.bubbles[k].style) bubbles[k].classList.add(s.bubbles[k].style);
+        }
+      });
+      if (s.activeNode) {
+        nodes[s.activeNode].classList.add(s.nodeColor);
+      }
+
+      // Cables & Moving Packet
+      Object.values(glows).forEach(g => g.className.baseVal = "cable-glow");
+      rippleWave.classList.remove("show");
+
+      if (s.motion) {
+        const m = s.motion;
+        glows[m.glow].classList.add(m.type === "arp" ? "active-arp" : "active-data");
+        movingPkt.className = `moving-pkt show ${m.type === "arp" ? "arp-style" : "data-style"}`;
+        movingPkt.textContent = m.label;
+        animatePacket(m.from, m.to, SPEEDS[speed].move);
+
+        if (m.rippleAt) {
+          rippleWave.style.left = m.rippleAt + "%";
+          rippleWave.classList.add("show");
+        }
+      } else {
+        if (animId) cancelAnimationFrame(animId);
+        movingPkt.classList.remove("show");
+      }
+
+      // R1 Routing Table
+      routingBox.classList.toggle("glow", s.r1Glow);
+
+      // Bottom Encapsulation Bar
+      document.getElementById("txtFrame").textContent = s.frameTxt;
+      document.getElementById("boxBits").classList.toggle("active", s.wireActive);
+      document.getElementById("boxSignals").classList.toggle("active", s.wireActive);
+      document.getElementById("waveSvg").classList.toggle("moving", s.wireActive);
+
+      // Right Inspector
+      const macCard = document.getElementById("macCard");
+      macCard.classList.remove("pulse");
+      void macCard.offsetWidth;
+      macCard.classList.add("pulse");
+
+      document.getElementById("valMac").textContent = s.macVal;
+      document.getElementById("descMac").textContent = s.macDesc;
+
+      for (let i = 1; i <= 5; i++) {
+        const el = document.getElementById("sum" + i);
+        el.className = "summary-item";
+        if (i < s.sumIdx) el.classList.add("done");
+        if (i === s.sumIdx) el.classList.add("active");
+      }
+
+      // Teacher Note
+      document.getElementById("teacherText").innerHTML = s.note;
+    }
+
+    function nextAuto() {
+      if (!playing) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (!playing) return;
+        if (idx < STEPS.length - 1) {
+          renderStep(idx + 1);
+          nextAuto();
+        } else {
+          stopPlay();
+        }
+      }, SPEEDS[speed].wait);
+    }
+
+    function startPlay() {
+      if (idx === STEPS.length - 1) renderStep(0);
+      playing = true;
+      const btn = document.getElementById("btnPlay");
+      btn.textContent = "⏸ Tạm dừng";
+      btn.classList.add("playing");
+      nextAuto();
+    }
+
+    function stopPlay() {
+      playing = false;
+      clearTimeout(timer);
+      const btn = document.getElementById("btnPlay");
+      btn.textContent = "▶ Tự chạy";
+      btn.classList.remove("playing");
+    }
+
+    document.getElementById("btnNext").addEventListener("click", () => {
+      stopPlay();
+      renderStep(idx < STEPS.length - 1 ? idx + 1 : 0);
+    });
+
+    document.getElementById("btnPrev").addEventListener("click", () => {
+      stopPlay();
+      if (idx > 0) renderStep(idx - 1);
+    });
+
+    document.getElementById("btnReset").addEventListener("click", () => {
+      stopPlay();
+      renderStep(0);
+    });
+
+    document.getElementById("btnPlay").addEventListener("click", () => {
+      playing ? stopPlay() : startPlay();
+    });
+
+    document.querySelectorAll(".speed-btn").forEach(b => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll(".speed-btn").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        speed = b.dataset.speed;
+        renderStep(idx);
+        if (playing) nextAuto();
+      });
+    });
+
+    window.addEventListener("keydown", e => {
+      if (e.code === "ArrowRight") { stopPlay(); if (idx < STEPS.length - 1) renderStep(idx + 1); }
+      if (e.code === "ArrowLeft")  { stopPlay(); if (idx > 0) renderStep(idx - 1); }
+      if (e.code === "Space")      { e.preventDefault(); playing ? stopPlay() : startPlay(); }
+    });
+
+    renderStep(0);
+  </script>
+</body>
+</html>
