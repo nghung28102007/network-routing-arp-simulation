@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mô Phỏng Routing &amp; ARP — Bản Trình Chiếu Lớp Học</title>
+  <title>Mô Phỏng Routing &amp; ARP — Classroom Presentation</title>
   <style>
     :root {
       --bg-main: #070b14;
@@ -78,7 +78,7 @@
     }
 
     .step-title {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--text-white);
     }
@@ -86,7 +86,7 @@
     .controls-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
@@ -94,9 +94,9 @@
       background: var(--bg-card);
       color: var(--text-white);
       border: 2px solid rgba(148, 163, 184, 0.3);
-      padding: 10px 20px;
+      padding: 10px 18px;
       border-radius: 12px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.18s ease;
@@ -119,8 +119,8 @@
       background: linear-gradient(135deg, #0284c7, #2563eb);
       border-color: var(--cyan);
       box-shadow: 0 0 18px rgba(37, 99, 235, 0.5);
-      padding: 10px 26px;
-      font-size: 1.18rem;
+      padding: 10px 24px;
+      font-size: 1.12rem;
     }
 
     .btn-play.playing {
@@ -129,7 +129,7 @@
       color: var(--emerald);
     }
 
-    .speed-box {
+    .speed-box, .lang-box {
       display: flex;
       background: #090e1a;
       padding: 4px;
@@ -137,20 +137,27 @@
       border: 1px solid var(--border);
     }
 
-    .speed-btn {
+    .speed-btn, .lang-btn {
       background: transparent;
       color: var(--text-muted);
       border: none;
-      padding: 8px 14px;
+      padding: 8px 13px;
       border-radius: 8px;
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
 
     .speed-btn.active {
       background: var(--bg-card);
       color: var(--cyan);
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(192, 132, 252, 0.25));
+      color: #fff;
+      border: 1px solid var(--cyan);
     }
 
     /* ================= 2. BỐ CỤC CHÍNH: SƠ ĐỒ MẠNG + BẢNG KIỂM TRA ================= */
@@ -583,19 +590,21 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
     }
 
     .card-label {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 800;
       text-transform: uppercase;
     }
 
     .badge-rule {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: 999px;
+      white-space: nowrap;
     }
 
     .big-value {
@@ -681,15 +690,21 @@
     </div>
 
     <div class="controls-row">
-      <button id="btnReset" class="btn" title="Làm lại từ đầu">⏮ Làm lại</button>
-      <button id="btnPrev" class="btn" title="Bước trước">◀ Lùi</button>
-      <button id="btnPlay" class="btn btn-play" title="Tự động chạy">▶ Tự chạy</button>
-      <button id="btnNext" class="btn btn-next" title="Bước tiếp theo">Tiếp theo ▶</button>
+      <!-- Chuyển đổi ngôn ngữ Tiếng Việt / English -->
+      <div class="lang-box" role="group" aria-label="Language Switcher">
+        <button class="lang-btn active" data-lang="vi">🇻🇳 Tiếng Việt</button>
+        <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+      </div>
+
+      <button id="btnReset" class="btn">⏮ Làm lại</button>
+      <button id="btnPrev" class="btn">◀ Lùi</button>
+      <button id="btnPlay" class="btn btn-play">▶ Tự chạy</button>
+      <button id="btnNext" class="btn btn-next">Tiếp theo ▶</button>
 
       <div class="speed-box">
-        <button class="speed-btn" data-speed="slow">Chậm</button>
-        <button class="speed-btn active" data-speed="normal">Vừa</button>
-        <button class="speed-btn" data-speed="fast">Nhanh</button>
+        <button id="spdSlow" class="speed-btn" data-speed="slow">Chậm</button>
+        <button id="spdNorm" class="speed-btn active" data-speed="normal">Vừa</button>
+        <button id="spdFast" class="speed-btn" data-speed="fast">Nhanh</button>
       </div>
     </div>
   </header>
@@ -715,13 +730,13 @@
         <div id="rippleWave" class="ripple-wave"></div>
 
         <!-- Gói tin di chuyển -->
-        <div id="movingPkt" class="moving-pkt">📦 Gói tin</div>
+        <div id="movingPkt" class="moving-pkt">📦 Packet</div>
 
         <!-- PC-A -->
         <div id="nodePCA" class="node node-pca">
           <div id="bubblePCA" class="bubble"></div>
           <div class="node-circle">💻</div>
-          <div class="node-title">PC-A (Nguồn)</div>
+          <div id="lblNodePCA" class="node-title">PC-A (Nguồn)</div>
           <div class="node-tag">MAC: AA-01</div>
         </div>
 
@@ -745,36 +760,36 @@
         <div id="nodePCC" class="node node-pcc">
           <div id="bubblePCC" class="bubble"></div>
           <div class="node-circle">🖥️</div>
-          <div class="node-title">PC-C (Đích)</div>
+          <div id="lblNodePCC" class="node-title">PC-C (Đích)</div>
           <div class="node-ip-tag">IP: 172.10.20.5 (/24)</div>
           <div class="node-tag">MAC: PC-C-MAC</div>
         </div>
 
         <!-- Bảng Định Tuyến tại R1 -->
         <div id="routingBox" class="routing-box">
-          <div class="routing-title">🗺️ Bảng Định Tuyến (Router R1)</div>
-          <div class="routing-rule">Mạng 172.10.20.0/24 ➔ Đi tiếp: R2</div>
+          <div id="lblRoutingTitle" class="routing-title">🗺️ Bảng Định Tuyến (Router R1)</div>
+          <div id="lblRoutingRule" class="routing-rule">Mạng 172.10.20.0/24 ➔ Đi tiếp: R2</div>
         </div>
       </div>
 
       <!-- Thanh Encapsulation: Frame -> Bits -> Signals -->
       <div class="layers-bar">
         <div id="boxFrame" class="layer-box active">
-          <div class="layer-name" style="color: var(--amber);">1. Frame (Đóng gói)</div>
+          <div id="lblLayer1" class="layer-name" style="color: var(--amber);">1. Frame (Đóng gói)</div>
           <div id="txtFrame" class="layer-val">[MAC: ???] + [IP: 172.10.20.5]</div>
         </div>
 
         <div class="layer-arrow">➔</div>
 
         <div id="boxBits" class="layer-box">
-          <div class="layer-name" style="color: var(--emerald);">2. Bits (Nhị phân)</div>
+          <div id="lblLayer2" class="layer-name" style="color: var(--emerald);">2. Bits (Nhị phân)</div>
           <div id="txtBits" class="layer-val">10110010 01011101 11001010</div>
         </div>
 
         <div class="layer-arrow">➔</div>
 
         <div id="boxSignals" class="layer-box">
-          <div class="layer-name" style="color: var(--cyan);">3. Signals (Xung điện)</div>
+          <div id="lblLayer3" class="layer-name" style="color: var(--cyan);">3. Signals (Xung điện)</div>
           <div style="overflow: hidden; height: 26px;">
             <svg id="waveSvg" class="wave-svg" viewBox="0 0 400 26" preserveAspectRatio="none">
               <path d="M 0 13 L 20 13 L 20 4 L 45 4 L 45 22 L 70 22 L 70 4 L 100 4 L 100 22 L 130 22 L 130 4 L 160 4 L 160 22 L 200 22 L 220 13 L 220 4 L 245 4 L 245 22 L 270 22 L 270 4 L 300 4 L 300 22 L 330 22 L 330 4 L 360 4 L 360 22 L 400 22" />
@@ -786,38 +801,38 @@
 
     <!-- CỘT PHẢI: BẢNG SO SÁNH IP ĐÍCH & MAC ĐÍCH -->
     <aside class="inspector-panel">
-      <div class="panel-heading">🔎 Bên Trong Gói Tin Hiện Tại</div>
+      <div id="lblInspectorHeading" class="panel-heading">🔎 Bên Trong Gói Tin Hiện Tại</div>
 
       <!-- THẺ 1: IP ĐÍCH (KHÔNG ĐỔI) -->
       <div class="big-card card-ip">
         <div class="card-top">
-          <span class="card-label" style="color: var(--cyan);">🌐 IP Đích (Đích Cuối)</span>
-          <span class="badge-rule" style="background: rgba(56,189,248,0.2); color: var(--cyan);">🔒 KHÔNG BAO GIỜ ĐỔI</span>
+          <span id="lblIpCardTitle" class="card-label" style="color: var(--cyan);">🌐 IP Đích (Đích Cuối)</span>
+          <span id="lblIpCardBadge" class="badge-rule" style="background: rgba(56,189,248,0.2); color: var(--cyan);">🔒 KHÔNG BAO GIỜ ĐỔI</span>
         </div>
         <div class="big-value">172.10.20.5 (PC-C)</div>
-        <div class="card-desc">Giống như <strong>tên người nhận cuối cùng</strong> ghi cố định trên phong bì thư.</div>
+        <div id="lblIpCardDesc" class="card-desc">Giống như <strong>tên người nhận cuối cùng</strong> ghi cố định trên phong bì thư.</div>
       </div>
 
       <!-- THẺ 2: MAC ĐÍCH (ĐỔI MỖI CHẶNG) -->
       <div id="macCard" class="big-card card-mac">
         <div class="card-top">
-          <span class="card-label" style="color: var(--amber);">🏷️ MAC Đích (Người Cầm Kế Tiếp)</span>
-          <span class="badge-rule" style="background: rgba(251,191,36,0.25); color: var(--amber);">🔄 ĐỔI Ở MỖI CHẶNG</span>
+          <span id="lblMacCardTitle" class="card-label" style="color: var(--amber);">🏷️ MAC Đích (Chặng Kế Tiếp)</span>
+          <span id="lblMacCardBadge" class="badge-rule" style="background: rgba(251,191,36,0.25); color: var(--amber);">🔄 ĐỔI Ở MỖI CHẶNG</span>
         </div>
-        <div id="valMac" class="big-value" style="color: var(--amber);">??? (Chưa biết)</div>
-        <div id="descMac" class="card-desc">PC-A chưa biết địa chỉ MAC của Router R1 nên cần hỏi qua ARP.</div>
+        <div id="valMac" class="big-value" style="color: var(--amber);">???</div>
+        <div id="descMac" class="card-desc">...</div>
       </div>
 
       <!-- TÓM TẮT HÀNH TRÌNH ĐỔI MAC -->
       <div class="mac-steps-summary">
-        <div style="font-size: 0.95rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">
+        <div id="lblSummaryHeading" style="font-size: 0.95rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">
           Hành trình thay đổi MAC Đích:
         </div>
-        <div id="sum1" class="summary-item"><span>1. Hỏi ARP tìm R1</span><span>FF:FF:FF:FF:FF:FF</span></div>
-        <div id="sum2" class="summary-item"><span>2. Chặng 1 (PC-A ➔ R1)</span><span>R1-MAC</span></div>
-        <div id="sum3" class="summary-item"><span>3. Chặng 2 (R1 ➔ R2)</span><span>R2-MAC</span></div>
-        <div id="sum4" class="summary-item"><span>4. Hỏi ARP tìm PC-C</span><span>FF:FF:FF:FF:FF:FF</span></div>
-        <div id="sum5" class="summary-item"><span>5. Chặng cuối (R2 ➔ PC-C)</span><span>PC-C-MAC</span></div>
+        <div id="sum1" class="summary-item"><span id="sumTxt1">1. Hỏi ARP tìm R1</span><span>FF:FF:FF:FF:FF:FF</span></div>
+        <div id="sum2" class="summary-item"><span id="sumTxt2">2. Chặng 1 (PC-A ➔ R1)</span><span>R1-MAC</span></div>
+        <div id="sum3" class="summary-item"><span id="sumTxt3">3. Chặng 2 (R1 ➔ R2)</span><span>R2-MAC</span></div>
+        <div id="sum4" class="summary-item"><span id="sumTxt4">4. Hỏi ARP tìm PC-C</span><span>FF:FF:FF:FF:FF:FF</span></div>
+        <div id="sum5" class="summary-item"><span id="sumTxt5">5. Chặng cuối (R2 ➔ PC-C)</span><span>PC-C-MAC</span></div>
       </div>
     </aside>
   </main>
@@ -826,126 +841,281 @@
   <footer class="teacher-box">
     <div class="teacher-icon">💡</div>
     <div id="teacherText" class="teacher-text">
-      Đang tải giải thích...
+      ...
     </div>
   </footer>
 
   <script>
+    // =========================================================================
+    // DỮ LIỆU SONG NGỮ (TIẾNG VIỆT & ENGLISH)
+    // =========================================================================
+    const UI_TEXT = {
+      vi: {
+        stepPrefix: "BƯỚC",
+        btnReset: "⏮ Làm lại",
+        btnPrev: "◀ Lùi",
+        btnPlay: "▶ Tự chạy",
+        btnPause: "⏸ Tạm dừng",
+        btnNext: "Tiếp theo ▶",
+        btnReplay: "↺ Chạy lại từ đầu",
+        spdSlow: "Chậm",
+        spdNorm: "Vừa",
+        spdFast: "Nhanh",
+        nodePCA: "PC-A (Nguồn)",
+        nodePCC: "PC-C (Đích)",
+        routingTitle: "🗺️ Bảng Định Tuyến (Router R1)",
+        routingRule: "Mạng 172.10.20.0/24 ➔ Đi tiếp: R2",
+        layer1: "1. Frame (Đóng gói)",
+        layer2: "2. Bits (Nhị phân)",
+        layer3: "3. Signals (Xung điện)",
+        inspectorHeading: "🔎 Bên Trong Gói Tin Hiện Tại",
+        ipCardTitle: "🌐 IP Đích (Đích Cuối)",
+        ipCardBadge: "🔒 KHÔNG BAO GIỜ ĐỔI",
+        ipCardDesc: "Giống như <strong>tên người nhận cuối cùng</strong> ghi cố định trên phong bì thư.",
+        macCardTitle: "🏷️ MAC Đích (Chặng Kế Tiếp)",
+        macCardBadge: "🔄 ĐỔI Ở MỖI CHẶNG",
+        summaryHeading: "Hành trình thay đổi MAC Đích:",
+        sum1: "1. Hỏi ARP tìm R1",
+        sum2: "2. Chặng 1 (PC-A ➔ R1)",
+        sum3: "3. Chặng 2 (R1 ➔ R2)",
+        sum4: "4. Hỏi ARP tìm PC-C",
+        sum5: "5. Chặng cuối (R2 ➔ PC-C)"
+      },
+      en: {
+        stepPrefix: "STEP",
+        btnReset: "⏮ Reset",
+        btnPrev: "◀ Prev",
+        btnPlay: "▶ Auto Play",
+        btnPause: "⏸ Pause",
+        btnNext: "Next Step ▶",
+        btnReplay: "↺ Replay from Start",
+        spdSlow: "Slow",
+        spdNorm: "Normal",
+        spdFast: "Fast",
+        nodePCA: "PC-A (Source)",
+        nodePCC: "PC-C (Dest)",
+        routingTitle: "🗺️ Routing Table (Router R1)",
+        routingRule: "Dest Net: 172.10.20.0/24 ➔ Next Hop: R2",
+        layer1: "1. Frame (Layer 2/3)",
+        layer2: "2. Bits (Binary 0/1)",
+        layer3: "3. Signals (Pulses)",
+        inspectorHeading: "🔎 Current Packet / Frame Inspector",
+        ipCardTitle: "🌐 Destination IP (Final Goal)",
+        ipCardBadge: "🔒 NEVER CHANGES",
+        ipCardDesc: "Like the <strong>final recipient's name</strong> written permanently on the envelope.",
+        macCardTitle: "🏷️ Destination MAC (Next Hop)",
+        macCardBadge: "🔄 CHANGES EVERY HOP",
+        summaryHeading: "Destination MAC Journey:",
+        sum1: "1. ARP Broadcast for R1",
+        sum2: "2. Hop 1 (PC-A ➔ R1)",
+        sum3: "3. Hop 2 (R1 ➔ R2)",
+        sum4: "4. ARP Broadcast for PC-C",
+        sum5: "5. Final Hop (R2 ➔ PC-C)"
+      }
+    };
+
     const STEPS = [
       {
-        title: "Chuẩn bị gửi tin tại PC-A",
         activeNode: "PCA",
         nodeColor: "active-cyan",
-        bubbles: {
-          PCA: { text: "💭 Cần gửi tin tới PC-C (172.10.20.5). Phải đưa qua Router R1, nhưng mình chưa biết MAC của R1!", style: "" }
-        },
         motion: null,
         r1Glow: false,
-        macVal: "??? (Chưa biết)",
-        macDesc: "PC-A chưa biết mặt (MAC) của Router R1 nên chưa thể gửi gói tin đi.",
-        frameTxt: "[MAC: ???] + [IP: 172.10.20.5]",
         wireActive: false,
         sumIdx: 0,
-        note: "<strong>Ví dụ thực tế (Biết Tên nhưng chưa biết Mặt):</strong> PC-A muốn gửi thư cho <strong>PC-C (172.10.20.5)</strong> ở phòng khác. Để gửi ra khỏi phòng, PC-A phải đưa thư cho lớp trưởng <strong>Router R1</strong>, nhưng PC-A chưa biết mặt (địa chỉ MAC) của R1."
+        vi: {
+          title: "Chuẩn bị gửi tin tại PC-A",
+          bubbles: {
+            PCA: { text: "💭 Cần gửi tin tới PC-C (172.10.20.5). Phải đưa qua Router R1, nhưng mình chưa biết MAC của R1!", style: "" }
+          },
+          macVal: "??? (Chưa biết)",
+          macDesc: "PC-A chưa biết mặt (MAC) của Router R1 nên chưa thể gửi gói tin đi.",
+          frameTxt: "[MAC: ???] + [IP: 172.10.20.5]",
+          note: "<strong>Ví dụ thực tế (Biết Tên nhưng chưa biết Mặt):</strong> PC-A muốn gửi thư cho <strong>PC-C (172.10.20.5)</strong> ở phòng khác. Để gửi ra khỏi phòng, PC-A phải đưa thư cho lớp trưởng <strong>Router R1</strong>, nhưng PC-A chưa biết mặt (địa chỉ MAC) của R1."
+        },
+        en: {
+          title: "Preparing the Packet at PC-A",
+          bubbles: {
+            PCA: { text: "💭 I need to send data to PC-C (172.10.20.5) via Router R1, but I don't know R1's MAC address yet!", style: "" }
+          },
+          macVal: "??? (Unknown)",
+          macDesc: "PC-A doesn't know Router R1's physical MAC address yet, so it must ask via ARP.",
+          frameTxt: "[MAC: ???] + [IP: 172.10.20.5]",
+          note: "<strong>Teacher's Analogy (Knowing the Name vs. Face):</strong> PC-A wants to mail a letter to <strong>PC-C (172.10.20.5)</strong> in another room. To leave the room, PC-A must hand it to room monitor <strong>Router R1</strong> — but PC-A doesn't know what R1's face (MAC address) looks like!"
+        }
       },
       {
-        title: "PC-A bắc loa ARP tìm Router R1",
         activeNode: "PCA",
         nodeColor: "active-amber",
-        bubbles: {
-          PCA: { text: "📢 [ARP Broadcast] Ai là Router R1 cho tôi xin địa chỉ MAC!", style: "b-arp" },
-          R1:  { text: "👋 Tôi đây! Địa chỉ MAC của R1 là R1-MAC!", style: "b-done" }
-        },
         motion: { from: 17, to: 31, glow: "glow1", type: "arp", label: "📢 ARP: FF:FF:FF:FF:FF:FF", rippleAt: 11 },
         r1Glow: false,
-        macVal: "FF:FF:FF:FF:FF:FF",
-        macDesc: "Địa chỉ Broadcast (hỏi toàn mạng nội bộ) để tìm xem ai là Router R1.",
-        frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Hỏi R1]",
         wireActive: true,
         sumIdx: 1,
-        note: "<strong>Bắc loa hỏi cả phòng (ARP Broadcast):</strong> Vì chưa biết mặt R1, PC-A dùng loa phóng thanh (<strong>FF:FF:FF:FF:FF:FF</strong>) hỏi cả phòng. Router R1 nghe thấy liền giơ tay trả lời: <em>'Mặt (MAC) của tôi là R1-MAC!'</em>"
+        vi: {
+          title: "PC-A bắc loa ARP tìm Router R1",
+          bubbles: {
+            PCA: { text: "📢 [ARP Broadcast] Ai là Router R1 cho tôi xin địa chỉ MAC!", style: "b-arp" },
+            R1:  { text: "👋 Tôi đây! Địa chỉ MAC của R1 là R1-MAC!", style: "b-done" }
+          },
+          macVal: "FF:FF:FF:FF:FF:FF",
+          macDesc: "Địa chỉ Broadcast (hỏi toàn mạng nội bộ) để tìm xem ai là Router R1.",
+          frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Hỏi R1]",
+          note: "<strong>Bắc loa hỏi cả phòng (ARP Broadcast):</strong> Vì chưa biết mặt R1, PC-A dùng loa phóng thanh (<strong>FF:FF:FF:FF:FF:FF</strong>) hỏi cả phòng. Router R1 nghe thấy liền giơ tay trả lời: <em>'Mặt (MAC) của tôi là R1-MAC!'</em>"
+        },
+        en: {
+          title: "PC-A Broadcasts ARP to Find Router R1",
+          bubbles: {
+            PCA: { text: "📢 [ARP Broadcast] Calling everyone! Who is Router R1? Tell me your MAC!", style: "b-arp" },
+            R1:  { text: "👋 That's me! My MAC address is R1-MAC!", style: "b-done" }
+          },
+          macVal: "FF:FF:FF:FF:FF:FF",
+          macDesc: "Broadcast MAC address (all 1s) — shouts to every device on the local network to find R1.",
+          frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Request]",
+          note: "<strong>Shouting with a Megaphone (ARP Broadcast):</strong> Since PC-A doesn't know R1's face, it uses a megaphone (<strong>FF:FF:FF:FF:FF:FF</strong>) to ask the whole room. Router R1 hears it and replies: <em>'My face (MAC) is R1-MAC!'</em>"
+        }
       },
       {
-        title: "Chặng 1: Gửi gói tin từ PC-A đến Router R1",
         activeNode: "PCA",
         nodeColor: "active-cyan",
-        bubbles: {
-          PCA: { text: "📦 Đã biết MAC của R1! Đóng gói gửi cho R1 (MAC Đích = R1-MAC).", style: "" }
-        },
         motion: { from: 17, to: 31, glow: "glow1", type: "data", label: "📦 MAC: R1-MAC | IP: 172.10.20.5" },
         r1Glow: false,
-        macVal: "R1-MAC (Router R1)",
-        macDesc: "Đóng gói vào Frame gửi thẳng cho người cầm hộ đầu tiên là Router R1.",
-        frameTxt: "[MAC: R1-MAC] + [IP: 172.10.20.5]",
         wireActive: true,
         sumIdx: 2,
-        note: "<strong>Trao tay chặng 1 (Frame ➔ Bits ➔ Signals):</strong> Phong bì bên trong vẫn ghi <strong>IP Đích: 172.10.20.5</strong>, còn nhãn dán bên ngoài ghi <strong>MAC Đích: R1-MAC</strong>. Gói tin biến thành chuỗi bit 0-1 và xung điện chạy tới R1."
+        vi: {
+          title: "Chặng 1: Gửi gói tin từ PC-A đến Router R1",
+          bubbles: {
+            PCA: { text: "📦 Đã biết MAC của R1! Đóng gói gửi cho R1 (MAC Đích = R1-MAC).", style: "" }
+          },
+          macVal: "R1-MAC (Router R1)",
+          macDesc: "Đóng gói vào Frame gửi thẳng cho người cầm hộ đầu tiên là Router R1.",
+          frameTxt: "[MAC: R1-MAC] + [IP: 172.10.20.5]",
+          note: "<strong>Trao tay chặng 1 (Frame ➔ Bits ➔ Signals):</strong> Phong bì bên trong vẫn ghi <strong>IP Đích: 172.10.20.5</strong>, còn nhãn dán bên ngoài ghi <strong>MAC Đích: R1-MAC</strong>. Gói tin biến thành chuỗi bit 0-1 và xung điện chạy tới R1."
+        },
+        en: {
+          title: "Hop 1: PC-A Sends Frame to Router R1",
+          bubbles: {
+            PCA: { text: "📦 Now I know R1's MAC! Sending Frame to R1 (Dest MAC = R1-MAC).", style: "" }
+          },
+          macVal: "R1-MAC (Router R1)",
+          macDesc: "Addressed to Router R1's MAC so the frame can cross the first wire.",
+          frameTxt: "[MAC: R1-MAC] + [IP: 172.10.20.5]",
+          note: "<strong>Handing Off to Monitor 1 (Frame ➔ Bits ➔ Signals):</strong> The inner envelope still says <strong>Dest IP: 172.10.20.5</strong>, while the outer sticky note says <strong>Dest MAC: R1-MAC</strong>. The Frame turns into binary Bits and electrical Signals traveling to R1."
+        }
       },
       {
-        title: "Router R1 tra Bảng Định Tuyến (Routing Table)",
         activeNode: "R1",
         nodeColor: "active-purple",
-        bubbles: {
-          R1: { text: "🔍 Xem IP đích 172.10.20.5... Tra bảng: Mạng 172.10.20.0/24 ➔ Chuyển tiếp sang Router R2!", style: "b-route" }
-        },
         motion: null,
         r1Glow: true,
-        macVal: "Đang đổi sang R2...",
-        macDesc: "R1 bóc bỏ nhãn MAC cũ và tra Bảng Định Tuyến để tìm người nhận kế tiếp.",
-        frameTxt: "[Đang tra bảng định tuyến tại R1...]",
         wireActive: false,
         sumIdx: 2,
-        note: "<strong>Tra biển chỉ đường (Routing Table):</strong> R1 bóc bỏ nhãn MAC cũ rồi đọc <strong>IP Đích (172.10.20.5)</strong>. Nhìn vào <strong>Bảng Định Tuyến</strong> bên dưới, R1 thấy muốn tới mạng <strong>172.10.20.0/24</strong> thì phải đưa tiếp cho <strong>Router R2</strong>."
+        vi: {
+          title: "Router R1 tra Bảng Định Tuyến (Routing Table)",
+          bubbles: {
+            R1: { text: "🔍 Xem IP đích 172.10.20.5... Tra bảng: Mạng 172.10.20.0/24 ➔ Chuyển tiếp sang Router R2!", style: "b-route" }
+          },
+          macVal: "Đang đổi sang R2...",
+          macDesc: "R1 bóc bỏ nhãn MAC cũ và tra Bảng Định Tuyến để tìm người nhận kế tiếp.",
+          frameTxt: "[Đang tra bảng định tuyến tại R1...]",
+          note: "<strong>Tra biển chỉ đường (Routing Table):</strong> R1 bóc bỏ nhãn MAC cũ rồi đọc <strong>IP Đích (172.10.20.5)</strong>. Nhìn vào <strong>Bảng Định Tuyến</strong> bên dưới, R1 thấy muốn tới mạng <strong>172.10.20.0/24</strong> thì phải đưa tiếp cho <strong>Router R2</strong>."
+        },
+        en: {
+          title: "Router R1 Looks Up Its Routing Table",
+          bubbles: {
+            R1: { text: "🔍 Checking Dest IP 172.10.20.5 in my Routing Table... Match: 172.10.20.0/24 ➔ Next Hop is R2!", style: "b-route" }
+          },
+          macVal: "Switching to R2...",
+          macDesc: "R1 strips off the old Hop 1 MAC header and checks its Routing Table for the next hop.",
+          frameTxt: "[Inspecting Routing Table at R1...]",
+          note: "<strong>Checking the Hallway Signpost (Routing Table):</strong> R1 peels off the old MAC sticky note and reads <strong>Dest IP (172.10.20.5)</strong>. Looking at its <strong>Routing Table</strong> below, R1 sees that to reach <strong>172.10.20.0/24</strong>, it must pass the packet to <strong>Router R2</strong>."
+        }
       },
       {
-        title: "Chặng 2: Chuyển gói tin từ Router R1 sang Router R2",
         activeNode: "R1",
         nodeColor: "active-cyan",
-        bubbles: {
-          R1: { text: "🏷️ Dán nhãn MAC mới của R2 (R2-MAC)! Giữ nguyên IP Đích 172.10.20.5!", style: "" }
-        },
         motion: { from: 43, to: 57, glow: "glow2", type: "data", label: "📦 MAC: R2-MAC | IP: 172.10.20.5" },
         r1Glow: false,
-        macVal: "R2-MAC (Router R2)",
-        macDesc: "Đổi sang MAC của Router R2 để gói tin đi qua dây cáp giữa R1 và R2.",
-        frameTxt: "[MAC: R2-MAC] + [IP: 172.10.20.5]",
         wireActive: true,
         sumIdx: 3,
-        note: "<strong>Quy tắc vàng — Đổi MAC, Giữ nguyên IP:</strong> R1 tuyệt đối <strong>không sửa IP Đích (172.10.20.5)</strong>, mà chỉ dán nhãn <strong>MAC Đích mới (R2-MAC)</strong> để chuyền gói tin sang cho Router R2."
+        vi: {
+          title: "Chặng 2: Chuyển gói tin từ Router R1 sang Router R2",
+          bubbles: {
+            R1: { text: "🏷️ Dán nhãn MAC mới của R2 (R2-MAC)! Giữ nguyên IP Đích 172.10.20.5!", style: "" }
+          },
+          macVal: "R2-MAC (Router R2)",
+          macDesc: "Đổi sang MAC của Router R2 để gói tin đi qua dây cáp giữa R1 và R2.",
+          frameTxt: "[MAC: R2-MAC] + [IP: 172.10.20.5]",
+          note: "<strong>Quy tắc vàng — Đổi MAC, Giữ nguyên IP:</strong> R1 tuyệt đối <strong>không sửa IP Đích (172.10.20.5)</strong>, mà chỉ dán nhãn <strong>MAC Đích mới (R2-MAC)</strong> để chuyền gói tin sang cho Router R2."
+        },
+        en: {
+          title: "Hop 2: Router R1 Forwards Frame to Router R2",
+          bubbles: {
+            R1: { text: "🏷️ Putting on a NEW MAC label for R2 (R2-MAC)! Dest IP stays 172.10.20.5!", style: "" }
+          },
+          macVal: "R2-MAC (Router R2)",
+          macDesc: "Updated to Router R2's MAC address for the link between R1 and R2.",
+          frameTxt: "[MAC: R2-MAC] + [IP: 172.10.20.5]",
+          note: "<strong>The Golden Rule — New MAC, Same IP:</strong> R1 <strong>never changes the Destination IP (172.10.20.5)</strong>. It simply puts on a fresh outer <strong>Destination MAC label (R2-MAC)</strong> to hand the packet to Router R2."
+        }
       },
       {
-        title: "Router R2 bắc loa ARP tìm PC-C (172.10.20.5)",
         activeNode: "R2",
         nodeColor: "active-amber",
-        bubbles: {
-          R2:  { text: "📢 [ARP Broadcast] Đã tới mạng đích! Ai có IP 172.10.20.5 cho xin địa chỉ MAC?", style: "b-arp" },
-          PCC: { text: "🙋‍♂️ Tôi là 172.10.20.5 đây! MAC của tôi là PC-C-MAC!", style: "b-done" }
-        },
         motion: { from: 69, to: 83, glow: "glow3", type: "arp", label: "📢 ARP: FF:FF:FF:FF:FF:FF", rippleAt: 63 },
         r1Glow: false,
-        macVal: "FF:FF:FF:FF:FF:FF",
-        macDesc: "R2 phát loa Broadcast hỏi toàn mạng đích xem ai có IP 172.10.20.5.",
-        frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Hỏi 172.10.20.5]",
         wireActive: true,
         sumIdx: 4,
-        note: "<strong>Bắc loa ở phòng đích (ARP lần 2):</strong> R2 đã mang thư tới đúng phòng <strong>172.10.20.0/24</strong>, nhưng chưa biết mặt <strong>PC-C (172.10.20.5)</strong>. R2 lại bắc loa <strong>FF:FF:FF:FF:FF:FF</strong> hỏi, và PC-C giơ tay báo lại MAC là <strong>PC-C-MAC</strong>."
+        vi: {
+          title: "Router R2 bắc loa ARP tìm PC-C (172.10.20.5)",
+          bubbles: {
+            R2:  { text: "📢 [ARP Broadcast] Đã tới mạng đích! Ai có IP 172.10.20.5 cho xin địa chỉ MAC?", style: "b-arp" },
+            PCC: { text: "🙋‍♂️ Tôi là 172.10.20.5 đây! MAC của tôi là PC-C-MAC!", style: "b-done" }
+          },
+          macVal: "FF:FF:FF:FF:FF:FF",
+          macDesc: "R2 phát loa Broadcast hỏi toàn mạng đích xem ai có IP 172.10.20.5.",
+          frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Hỏi 172.10.20.5]",
+          note: "<strong>Bắc loa ở phòng đích (ARP lần 2):</strong> R2 đã mang thư tới đúng phòng <strong>172.10.20.0/24</strong>, nhưng chưa biết mặt <strong>PC-C (172.10.20.5)</strong>. R2 lại bắc loa <strong>FF:FF:FF:FF:FF:FF</strong> hỏi, và PC-C giơ tay báo lại MAC là <strong>PC-C-MAC</strong>."
+        },
+        en: {
+          title: "Router R2 Broadcasts ARP to Find PC-C (172.10.20.5)",
+          bubbles: {
+            R2:  { text: "📢 [ARP Broadcast] We reached 172.10.20.0/24! Who has IP 172.10.20.5? What's your MAC?", style: "b-arp" },
+            PCC: { text: "🙋‍♂️ I am 172.10.20.5! My MAC address is PC-C-MAC!", style: "b-done" }
+          },
+          macVal: "FF:FF:FF:FF:FF:FF",
+          macDesc: "R2 broadcasts an ARP Request on the destination LAN to find PC-C's MAC address.",
+          frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP WhoHas 172.10.20.5]",
+          note: "<strong>Megaphone in the Destination Room (2nd ARP):</strong> R2 has arrived at the destination classroom (<strong>172.10.20.0/24</strong>), but doesn't know <strong>PC-C's face (MAC)</strong> yet. R2 shouts with the megaphone (<strong>FF:FF:FF:FF:FF:FF</strong>), and PC-C replies: <em>'My MAC is PC-C-MAC!'</em>"
+        }
       },
       {
-        title: "Chặng cuối: Giao gói tin từ R2 đến tận tay PC-C! 🎉",
         activeNode: "PCC",
         nodeColor: "active-emerald",
-        bubbles: {
-          R2:  { text: "🚀 Dán MAC Đích = PC-C-MAC và chuyển tới PC-C!", style: "" },
-          PCC: { text: "🎉 Đã nhận được gói tin! Đúng MAC và đúng IP 172.10.20.5 của mình rồi!", style: "b-done" }
-        },
         motion: { from: 69, to: 83, glow: "glow3", type: "data", label: "🎉 MAC: PC-C-MAC | IP: 172.10.20.5" },
         r1Glow: false,
-        macVal: "PC-C-MAC (PC-C)",
-        macDesc: "Gói tin đã tới đích! MAC Đích đã đổi 5 lần, còn IP Đích giữ nguyên từ đầu đến cuối.",
-        frameTxt: "[MAC: PC-C-MAC] + [IP: 172.10.20.5]",
         wireActive: true,
         sumIdx: 5,
-        note: "<strong>TỔNG KẾT CỐT LÕI:</strong> Suốt hành trình từ PC-A đến PC-C, <strong>IP Đích (172.10.20.5) luôn giữ nguyên</strong> để định hướng đường đi, còn <strong>MAC Đích thay đổi ở từng chặng</strong> để trao tay gói tin qua từng thiết bị!"
+        vi: {
+          title: "Chặng cuối: Giao gói tin từ R2 đến tận tay PC-C! 🎉",
+          bubbles: {
+            R2:  { text: "🚀 Dán MAC Đích = PC-C-MAC và chuyển tới PC-C!", style: "" },
+            PCC: { text: "🎉 Đã nhận được gói tin! Đúng MAC và đúng IP 172.10.20.5 của mình rồi!", style: "b-done" }
+          },
+          macVal: "PC-C-MAC (PC-C)",
+          macDesc: "Gói tin đã tới đích! MAC Đích đã đổi 5 lần, còn IP Đích giữ nguyên từ đầu đến cuối.",
+          frameTxt: "[MAC: PC-C-MAC] + [IP: 172.10.20.5]",
+          note: "<strong>TỔNG KẾT CỐT LÕI:</strong> Suốt hành trình từ PC-A đến PC-C, <strong>IP Đích (172.10.20.5) luôn giữ nguyên</strong> để định hướng đường đi, còn <strong>MAC Đích thay đổi ở từng chặng</strong> để trao tay gói tin qua từng thiết bị!"
+        },
+        en: {
+          title: "Final Hop: Router R2 Delivers the Frame to PC-C! 🎉",
+          bubbles: {
+            R2:  { text: "🚀 Setting Dest MAC = PC-C-MAC and delivering to PC-C!", style: "" },
+            PCC: { text: "🎉 Packet received! Both MAC (PC-C-MAC) and IP (172.10.20.5) match mine!", style: "b-done" }
+          },
+          macVal: "PC-C-MAC (PC-C)",
+          macDesc: "Delivered! Destination MAC changed 5 times, while Destination IP stayed constant from start to finish.",
+          frameTxt: "[MAC: PC-C-MAC] + [IP: 172.10.20.5]",
+          note: "<strong>KEY TAKEAWAY:</strong> Across the entire journey from PC-A to PC-C, the <strong>Destination IP (172.10.20.5) NEVER changed</strong>, while the <strong>Destination MAC changed at every single hop</strong> to pass the frame from neighbor to neighbor!"
+        }
       }
     ];
 
@@ -956,6 +1126,7 @@
     };
 
     let idx = 0;
+    let lang = "vi";
     let playing = false;
     let speed = "normal";
     let timer = null;
@@ -1000,23 +1171,57 @@
       animId = requestAnimationFrame(frame);
     }
 
+    function applyStaticLanguage() {
+      const t = UI_TEXT[lang];
+      document.documentElement.lang = lang;
+      document.getElementById("btnReset").textContent = t.btnReset;
+      document.getElementById("btnPrev").textContent = t.btnPrev;
+      document.getElementById("btnPlay").textContent = playing ? t.btnPause : t.btnPlay;
+      document.getElementById("spdSlow").textContent = t.spdSlow;
+      document.getElementById("spdNorm").textContent = t.spdNorm;
+      document.getElementById("spdFast").textContent = t.spdFast;
+
+      document.getElementById("lblNodePCA").textContent = t.nodePCA;
+      document.getElementById("lblNodePCC").textContent = t.nodePCC;
+      document.getElementById("lblRoutingTitle").textContent = t.routingTitle;
+      document.getElementById("lblRoutingRule").textContent = t.routingRule;
+
+      document.getElementById("lblLayer1").textContent = t.layer1;
+      document.getElementById("lblLayer2").textContent = t.layer2;
+      document.getElementById("lblLayer3").textContent = t.layer3;
+
+      document.getElementById("lblInspectorHeading").textContent = t.inspectorHeading;
+      document.getElementById("lblIpCardTitle").textContent = t.ipCardTitle;
+      document.getElementById("lblIpCardBadge").textContent = t.ipCardBadge;
+      document.getElementById("lblIpCardDesc").innerHTML = t.ipCardDesc;
+      document.getElementById("lblMacCardTitle").textContent = t.macCardTitle;
+      document.getElementById("lblMacCardBadge").textContent = t.macCardBadge;
+      document.getElementById("lblSummaryHeading").textContent = t.summaryHeading;
+
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById("sumTxt" + i).textContent = t["sum" + i];
+      }
+    }
+
     function renderStep(newIdx) {
       idx = Math.max(0, Math.min(STEPS.length - 1, newIdx));
       const s = STEPS[idx];
+      const content = s[lang];
+      const t = UI_TEXT[lang];
 
-      document.getElementById("stepBadge").textContent = `BƯỚC ${idx + 1} / ${STEPS.length}`;
-      document.getElementById("stepTitle").textContent = s.title;
+      document.getElementById("stepBadge").textContent = `${t.stepPrefix} ${idx + 1} / ${STEPS.length}`;
+      document.getElementById("stepTitle").textContent = content.title;
       document.getElementById("btnPrev").disabled = idx === 0;
-      document.getElementById("btnNext").textContent = idx === STEPS.length - 1 ? "↺ Chạy lại từ đầu" : "Tiếp theo ▶";
+      document.getElementById("btnNext").textContent = idx === STEPS.length - 1 ? t.btnReplay : t.btnNext;
 
       // Nodes & Bubbles
       Object.keys(nodes).forEach(k => {
         nodes[k].className = `node node-${k.toLowerCase()}`;
         bubbles[k].className = "bubble";
-        if (s.bubbles[k]) {
-          bubbles[k].textContent = s.bubbles[k].text;
+        if (content.bubbles[k]) {
+          bubbles[k].textContent = content.bubbles[k].text;
           bubbles[k].classList.add("show");
-          if (s.bubbles[k].style) bubbles[k].classList.add(s.bubbles[k].style);
+          if (content.bubbles[k].style) bubbles[k].classList.add(content.bubbles[k].style);
         }
       });
       if (s.activeNode) {
@@ -1047,7 +1252,7 @@
       routingBox.classList.toggle("glow", s.r1Glow);
 
       // Bottom Encapsulation Bar
-      document.getElementById("txtFrame").textContent = s.frameTxt;
+      document.getElementById("txtFrame").textContent = content.frameTxt;
       document.getElementById("boxBits").classList.toggle("active", s.wireActive);
       document.getElementById("boxSignals").classList.toggle("active", s.wireActive);
       document.getElementById("waveSvg").classList.toggle("moving", s.wireActive);
@@ -1058,8 +1263,8 @@
       void macCard.offsetWidth;
       macCard.classList.add("pulse");
 
-      document.getElementById("valMac").textContent = s.macVal;
-      document.getElementById("descMac").textContent = s.macDesc;
+      document.getElementById("valMac").textContent = content.macVal;
+      document.getElementById("descMac").textContent = content.macDesc;
 
       for (let i = 1; i <= 5; i++) {
         const el = document.getElementById("sum" + i);
@@ -1069,7 +1274,7 @@
       }
 
       // Teacher Note
-      document.getElementById("teacherText").innerHTML = s.note;
+      document.getElementById("teacherText").innerHTML = content.note;
     }
 
     function nextAuto() {
@@ -1090,7 +1295,7 @@
       if (idx === STEPS.length - 1) renderStep(0);
       playing = true;
       const btn = document.getElementById("btnPlay");
-      btn.textContent = "⏸ Tạm dừng";
+      btn.textContent = UI_TEXT[lang].btnPause;
       btn.classList.add("playing");
       nextAuto();
     }
@@ -1099,7 +1304,7 @@
       playing = false;
       clearTimeout(timer);
       const btn = document.getElementById("btnPlay");
-      btn.textContent = "▶ Tự chạy";
+      btn.textContent = UI_TEXT[lang].btnPlay;
       btn.classList.remove("playing");
     }
 
@@ -1132,12 +1337,23 @@
       });
     });
 
+    document.querySelectorAll(".lang-btn").forEach(b => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll(".lang-btn").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        lang = b.dataset.lang;
+        applyStaticLanguage();
+        renderStep(idx);
+      });
+    });
+
     window.addEventListener("keydown", e => {
       if (e.code === "ArrowRight") { stopPlay(); if (idx < STEPS.length - 1) renderStep(idx + 1); }
       if (e.code === "ArrowLeft")  { stopPlay(); if (idx > 0) renderStep(idx - 1); }
       if (e.code === "Space")      { e.preventDefault(); playing ? stopPlay() : startPlay(); }
     });
 
+    applyStaticLanguage();
     renderStep(0);
   </script>
 </body>
