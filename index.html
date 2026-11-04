@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mô Phỏng Routing &amp; ARP — Scenario A (LAN ARP) &amp; Scenario B (Multi-Hop Routing)</title>
+  <title>Mô Phỏng Routing &amp; ARP — Tinh Gọn Cho Lớp Học</title>
   <style>
     :root {
       --bg-main: #070b14;
       --bg-panel: #0f172a;
       --bg-card: #1e293b;
-      --border: rgba(148, 163, 184, 0.24);
+      --border: rgba(148, 163, 184, 0.22);
 
       --text-white: #ffffff;
       --text-light: #e2e8f0;
@@ -44,11 +44,11 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 12px 20px;
-      gap: 12px;
+      padding: 14px 22px;
+      gap: 14px;
     }
 
-    /* ================= THANH CHỌN KỊCH BẢN (SCENARIO A / B) + NGÔN NGỮ ================= */
+    /* ================= THANH CHỌN KỊCH BẢN + NGÔN NGỮ ================= */
     .scenario-bar {
       display: flex;
       align-items: center;
@@ -71,15 +71,12 @@
       background: var(--bg-card);
       color: var(--text-muted);
       border: 2px solid transparent;
-      padding: 9px 18px;
+      padding: 10px 20px;
       border-radius: 11px;
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       font-weight: 800;
       cursor: pointer;
       transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .scen-tab:hover {
@@ -88,18 +85,18 @@
     }
 
     .scen-tab.active {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(37, 99, 235, 0.32));
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(37, 99, 235, 0.35));
       color: #fff;
       border-color: var(--cyan);
       box-shadow: 0 0 18px rgba(56, 189, 248, 0.3);
     }
 
-    /* ================= 1. THANH ĐIỀU KHIỂN BƯỚC (TO & RÕ) ================= */
+    /* ================= 1. THANH ĐIỀU KHIỂN BƯỚC ================= */
     .top-bar {
       background: var(--bg-panel);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 11px 20px;
+      padding: 12px 22px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -117,16 +114,15 @@
       background: var(--cyan);
       color: #070b14;
       font-weight: 900;
-      font-size: 1.12rem;
+      font-size: 1.15rem;
       padding: 6px 16px;
       border-radius: 999px;
-      letter-spacing: 0.03em;
       white-space: nowrap;
       box-shadow: 0 0 16px var(--cyan-glow);
     }
 
     .step-title {
-      font-size: 1.38rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--text-white);
     }
@@ -142,15 +138,12 @@
       background: var(--bg-card);
       color: var(--text-white);
       border: 2px solid rgba(148, 163, 184, 0.3);
-      padding: 9px 17px;
+      padding: 10px 18px;
       border-radius: 11px;
-      font-size: 1.02rem;
+      font-size: 1.05rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.18s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .btn:hover:not(:disabled) {
@@ -167,8 +160,8 @@
       background: linear-gradient(135deg, #0284c7, #2563eb);
       border-color: var(--cyan);
       box-shadow: 0 0 18px rgba(37, 99, 235, 0.5);
-      padding: 9px 22px;
-      font-size: 1.08rem;
+      padding: 10px 24px;
+      font-size: 1.12rem;
     }
 
     .btn-play.playing {
@@ -189,12 +182,11 @@
       background: transparent;
       color: var(--text-muted);
       border: none;
-      padding: 7px 12px;
+      padding: 8px 13px;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
     .speed-btn.active {
@@ -208,15 +200,15 @@
       border: 1px solid var(--cyan);
     }
 
-    /* ================= 2. BỐ CỤC CHÍNH: SƠ ĐỒ MẠNG + BẢNG KIỂM TRA ================= */
+    /* ================= 2. BỐ CỤC CHÍNH: SƠ ĐỒ MẠNG + 2 THẺ ĐỊA CHỈ ================= */
     .main-grid {
       display: grid;
-      grid-template-columns: 1fr 430px;
+      grid-template-columns: 1fr 420px;
       gap: 16px;
       flex: 1;
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1180px) {
       .main-grid {
         grid-template-columns: 1fr;
       }
@@ -227,17 +219,16 @@
       background: var(--bg-panel);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 16px 22px;
+      padding: 20px 24px;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
+      align-items: center;
+      justify-content: center;
       position: relative;
     }
 
     .stage {
       position: relative;
-      height: 400px;
+      height: 440px;
       width: 100%;
     }
 
@@ -295,9 +286,9 @@
     /* Sóng loa Broadcast */
     .ripple-wave {
       position: absolute;
-      top: 195px;
-      width: 90px;
-      height: 90px;
+      top: 215px;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
       border: 4px solid var(--amber);
       transform: translate(-50%, -50%) scale(0.5);
@@ -312,23 +303,23 @@
 
     @keyframes ripplePulse {
       0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(2.9); opacity: 0; }
     }
 
     /* Gói tin di chuyển (To, Rõ) */
     .moving-pkt {
       position: absolute;
-      top: 195px;
+      top: 215px;
       left: 12%;
       transform: translate(-50%, -50%);
       z-index: 25;
-      padding: 8px 16px;
-      border-radius: 13px;
+      padding: 10px 18px;
+      border-radius: 14px;
       background: #090d16;
       border: 3px solid var(--cyan);
-      box-shadow: 0 0 26px var(--cyan-glow);
+      box-shadow: 0 0 28px var(--cyan-glow);
       font-weight: 800;
-      font-size: 1.08rem;
+      font-size: 1.15rem;
       white-space: nowrap;
       opacity: 0;
       pointer-events: none;
@@ -342,30 +333,30 @@
     .moving-pkt.arp-style {
       border-color: var(--amber);
       color: var(--amber);
-      box-shadow: 0 0 26px var(--amber-glow);
+      box-shadow: 0 0 28px var(--amber-glow);
     }
 
     .moving-pkt.reply-style {
       border-color: var(--emerald);
       color: var(--emerald);
-      box-shadow: 0 0 26px var(--emerald-glow);
+      box-shadow: 0 0 28px var(--emerald-glow);
     }
 
     .moving-pkt.data-style {
       border-color: var(--cyan);
       color: var(--cyan);
-      box-shadow: 0 0 26px var(--cyan-glow);
+      box-shadow: 0 0 28px var(--cyan-glow);
     }
 
     /* Thiết bị mạng */
     .node {
       position: absolute;
-      top: 145px;
+      top: 165px;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 205px;
+      width: 210px;
       z-index: 10;
       transition: all 0.3s ease;
     }
@@ -373,17 +364,17 @@
     /* Bong bóng lời thoại */
     .bubble {
       position: absolute;
-      bottom: calc(100% + 14px);
+      bottom: calc(100% + 18px);
       left: 50%;
       transform: translateX(-50%) scale(0.95);
-      width: 245px;
+      width: 255px;
       background: #1e293b;
       border: 3px solid var(--cyan);
-      border-radius: 15px;
-      padding: 9px 13px;
-      font-size: 1.04rem;
+      border-radius: 16px;
+      padding: 11px 15px;
+      font-size: 1.1rem;
       font-weight: 700;
-      line-height: 1.35;
+      line-height: 1.38;
       color: #fff;
       text-align: center;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
@@ -409,7 +400,7 @@
       top: 100%;
       left: 50%;
       transform: translateX(-50%);
-      border-width: 9px;
+      border-width: 10px;
       border-style: solid;
       border-color: var(--cyan) transparent transparent transparent;
     }
@@ -419,15 +410,15 @@
     .bubble.b-drop::after { border-top-color: var(--rose); }
 
     .node-circle {
-      width: 90px;
-      height: 90px;
-      border-radius: 22px;
+      width: 100px;
+      height: 100px;
+      border-radius: 24px;
       background: #162036;
       border: 3px solid #475569;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       transition: all 0.25s ease;
       position: relative;
@@ -439,17 +430,17 @@
 
     .port-badge {
       position: absolute;
-      right: -34px;
+      right: -36px;
       top: 50%;
       transform: translateY(-50%);
       background: #0b1120;
       border: 2px solid var(--purple);
       color: var(--purple);
       font-family: var(--font-mono);
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       font-weight: 900;
-      padding: 2px 7px;
-      border-radius: 6px;
+      padding: 3px 8px;
+      border-radius: 7px;
       transition: all 0.25s ease;
     }
 
@@ -457,61 +448,61 @@
       background: var(--emerald);
       border-color: #fff;
       color: #070b14;
-      box-shadow: 0 0 16px var(--emerald-glow);
+      box-shadow: 0 0 18px var(--emerald-glow);
       transform: translateY(-50%) scale(1.15);
     }
 
     .node.active-cyan .node-circle {
       border-color: var(--cyan);
-      box-shadow: 0 0 28px var(--cyan-glow);
-      transform: scale(1.07);
+      box-shadow: 0 0 30px var(--cyan-glow);
+      transform: scale(1.08);
     }
     .node.active-amber .node-circle {
       border-color: var(--amber);
-      box-shadow: 0 0 28px var(--amber-glow);
-      transform: scale(1.07);
+      box-shadow: 0 0 30px var(--amber-glow);
+      transform: scale(1.08);
     }
     .node.active-purple .node-circle {
       border-color: var(--purple);
-      box-shadow: 0 0 28px var(--purple-glow);
-      transform: scale(1.07);
+      box-shadow: 0 0 30px var(--purple-glow);
+      transform: scale(1.08);
     }
     .node.active-emerald .node-circle {
       border-color: var(--emerald);
-      box-shadow: 0 0 30px var(--emerald-glow);
-      transform: scale(1.09);
+      box-shadow: 0 0 32px var(--emerald-glow);
+      transform: scale(1.1);
     }
     .node.active-rose .node-circle {
       border-color: var(--rose);
-      box-shadow: 0 0 25px var(--rose-glow);
+      box-shadow: 0 0 26px var(--rose-glow);
     }
 
     .node-title {
-      margin-top: 7px;
-      font-size: 1.25rem;
+      margin-top: 9px;
+      font-size: 1.35rem;
       font-weight: 800;
     }
 
     .node-ip-tag {
-      margin-top: 3px;
-      background: rgba(56, 189, 248, 0.14);
+      margin-top: 4px;
+      background: rgba(56, 189, 248, 0.15);
       border: 1px solid rgba(56, 189, 248, 0.45);
-      padding: 2px 10px;
-      border-radius: 7px;
+      padding: 3px 11px;
+      border-radius: 8px;
       font-family: var(--font-mono);
-      font-size: 0.94rem;
+      font-size: 1rem;
       font-weight: 800;
       color: var(--cyan);
     }
 
     .node-tag {
-      margin-top: 3px;
+      margin-top: 4px;
       background: #0b1120;
       border: 1px solid rgba(148, 163, 184, 0.3);
-      padding: 3px 10px;
-      border-radius: 7px;
+      padding: 4px 12px;
+      border-radius: 8px;
       font-family: var(--font-mono);
-      font-size: 0.94rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--amber);
     }
@@ -519,12 +510,12 @@
     /* Hộp Bảng ARP & Bảng Định Tuyến dưới chân sơ đồ */
     .bottom-widget {
       position: absolute;
-      bottom: 0;
+      bottom: 4px;
       transform: translateX(-50%);
       background: #151e34;
       border: 2px solid rgba(148, 163, 184, 0.35);
-      border-radius: 13px;
-      padding: 8px 16px;
+      border-radius: 14px;
+      padding: 10px 20px;
       text-align: center;
       transition: all 0.25s ease;
       z-index: 15;
@@ -532,124 +523,58 @@
 
     .bottom-widget.glow-purple {
       border-color: var(--purple);
-      background: rgba(192, 132, 252, 0.2);
-      box-shadow: 0 0 28px var(--purple-glow);
-      transform: translateX(-50%) scale(1.07);
+      background: rgba(192, 132, 252, 0.22);
+      box-shadow: 0 0 30px var(--purple-glow);
+      transform: translateX(-50%) scale(1.08);
     }
 
     .bottom-widget.glow-emerald {
       border-color: var(--emerald);
-      background: rgba(52, 211, 153, 0.18);
-      box-shadow: 0 0 28px var(--emerald-glow);
-      transform: translateX(-50%) scale(1.07);
+      background: rgba(52, 211, 153, 0.2);
+      box-shadow: 0 0 30px var(--emerald-glow);
+      transform: translateX(-50%) scale(1.08);
     }
 
     .widget-title {
-      font-size: 0.9rem;
+      font-size: 0.96rem;
       font-weight: 800;
       text-transform: uppercase;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .widget-val {
       font-family: var(--font-mono);
-      font-size: 1.05rem;
+      font-size: 1.14rem;
       font-weight: 800;
       color: #fff;
     }
 
-    /* Thanh tầng vật lý dưới cùng: Frame -> Bits -> Signals */
-    .layers-bar {
-      background: #090e1a;
-      border: 2px solid rgba(56, 189, 248, 0.3);
-      border-radius: 14px;
-      padding: 10px 16px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr auto 1fr;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .layer-box {
-      background: var(--bg-card);
-      border: 2px solid transparent;
-      border-radius: 11px;
-      padding: 9px 13px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .layer-box.active {
-      border-color: var(--cyan);
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
-    }
-
-    .layer-name {
-      font-size: 0.96rem;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .layer-val {
-      font-family: var(--font-mono);
-      font-size: 1.02rem;
-      font-weight: 700;
-      color: var(--text-light);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .layer-arrow {
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: var(--cyan);
-    }
-
-    .wave-svg {
-      width: 200%;
-      height: 24px;
-      stroke: var(--cyan);
-      stroke-width: 3;
-      fill: none;
-    }
-
-    .wave-svg.moving {
-      animation: waveMove 1s linear infinite;
-    }
-
-    @keyframes waveMove {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* ================= 3. CỘT PHẢI: INSPECTOR PANEL (CHỮ CỰC TO) ================= */
+    /* ================= 3. CỘT PHẢI: CHỈ 2 THẺ TO RÕ (IP ĐÍCH & MAC ĐÍCH) ================= */
     .inspector-panel {
       background: var(--bg-panel);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 18px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 14px;
+      justify-content: center;
+      gap: 20px;
     }
 
     .panel-heading {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 800;
       color: var(--text-white);
       border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
+      padding-bottom: 12px;
     }
 
     .big-card {
-      border-radius: 15px;
-      padding: 16px;
+      border-radius: 18px;
+      padding: 24px 20px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 10px;
     }
 
     .card-ip {
@@ -668,7 +593,7 @@
 
     @keyframes macFlash {
       0% { transform: scale(1); }
-      50% { transform: scale(1.04); box-shadow: 0 0 28px var(--amber-glow); }
+      50% { transform: scale(1.04); box-shadow: 0 0 30px var(--amber-glow); }
       100% { transform: scale(1); }
     }
 
@@ -680,60 +605,30 @@
     }
 
     .card-label {
-      font-size: 1.02rem;
+      font-size: 1.12rem;
       font-weight: 800;
       text-transform: uppercase;
     }
 
     .badge-rule {
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       font-weight: 800;
-      padding: 3px 9px;
+      padding: 4px 11px;
       border-radius: 999px;
       white-space: nowrap;
     }
 
     .big-value {
       font-family: var(--font-mono);
-      font-size: 1.75rem;
+      font-size: 2rem;
       font-weight: 900;
       color: #fff;
     }
 
     .card-desc {
-      font-size: 1rem;
+      font-size: 1.12rem;
       color: var(--text-light);
-      line-height: 1.38;
-    }
-
-    .mac-steps-summary {
-      background: var(--bg-card);
-      border-radius: 13px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .summary-item {
-      font-size: 0.96rem;
-      font-weight: 700;
-      padding: 5px 9px;
-      border-radius: 7px;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-    }
-
-    .summary-item.active {
-      background: rgba(251, 191, 36, 0.22);
-      color: #fff;
-      border: 1px solid var(--amber);
-    }
-
-    .summary-item.done {
-      color: var(--emerald);
+      line-height: 1.42;
     }
 
     /* ================= 4. HỘP GIẢI THÍCH DỄ HIỂU BÊN DƯỚI ================= */
@@ -742,20 +637,20 @@
       border: 2px solid var(--amber);
       border-left: 8px solid var(--amber);
       border-radius: 16px;
-      padding: 14px 22px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
     }
 
     .teacher-icon {
-      font-size: 2.3rem;
+      font-size: 2.5rem;
       flex-shrink: 0;
     }
 
     .teacher-text {
-      font-size: 1.2rem;
-      line-height: 1.42;
+      font-size: 1.25rem;
+      line-height: 1.45;
       color: #fff;
     }
 
@@ -774,10 +669,10 @@
   <nav class="scenario-bar" aria-label="Scenario Selection">
     <div class="scenario-tabs">
       <button id="tabScenA" class="scen-tab" data-scen="A">
-        📢 Scenario A: Cùng Mạng LAN (Giao Thức ARP)
+        📢 Scenario A: Cùng Mạng LAN (ARP)
       </button>
       <button id="tabScenB" class="scen-tab active" data-scen="B">
-        🌐 Scenario B: Khác Mạng Qua Nhiều Router (9 Bước)
+        🌐 Scenario B: Khác Mạng Qua Router (9 Bước)
       </button>
     </div>
 
@@ -811,48 +706,47 @@
   <!-- 2. KHU VỰC MÔ PHỎNG CHÍNH -->
   <main class="main-grid">
 
-    <!-- BẢNG TRẮNG SƠ ĐỒ MẠNG -->
+    <!-- BẢNG TRẮNG SƠ ĐỒ MẠNG (ĐÃ BỎ THANH SIGNALS RƯỜM RÀ) -->
     <section class="board-panel">
       <div class="stage">
         <!-- Dây mạng SVG -->
-        <svg class="stage-svg" viewBox="0 0 1000 400" preserveAspectRatio="none">
-          <!-- Dây cáp cho Scenario B (4 nút thẳng hàng) -->
+        <svg class="stage-svg" viewBox="0 0 1000 440" preserveAspectRatio="none">
+          <!-- Dây cáp cho Scenario B -->
           <g id="cablesB">
-            <line x1="110" y1="190" x2="370" y2="190" class="cable-bg" />
-            <line x1="370" y1="190" x2="630" y2="190" class="cable-bg" />
-            <line x1="630" y1="190" x2="890" y2="190" class="cable-bg" />
+            <line x1="110" y1="215" x2="370" y2="215" class="cable-bg" />
+            <line x1="370" y1="215" x2="630" y2="215" class="cable-bg" />
+            <line x1="630" y1="215" x2="890" y2="215" class="cable-bg" />
 
-            <line id="glowB1" x1="110" y1="190" x2="370" y2="190" class="cable-glow" />
-            <line id="glowB2" x1="370" y1="190" x2="630" y2="190" class="cable-glow" />
-            <line id="glowB3" x1="630" y1="190" x2="890" y2="190" class="cable-glow" />
+            <line id="glowB1" x1="110" y1="215" x2="370" y2="215" class="cable-glow" />
+            <line id="glowB2" x1="370" y1="215" x2="630" y2="215" class="cable-glow" />
+            <line id="glowB3" x1="630" y1="215" x2="890" y2="215" class="cable-glow" />
           </g>
 
-          <!-- Dây cáp cho Scenario A (PC-A -> Switch -> PC-B & PC-D) -->
+          <!-- Dây cáp cho Scenario A -->
           <g id="cablesA" class="hidden">
-            <line x1="120" y1="190" x2="430" y2="190" class="cable-bg" />
-            <line x1="430" y1="190" x2="730" y2="190" class="cable-bg" />
-            <line x1="430" y1="190" x2="900" y2="190" class="cable-bg" />
+            <line x1="120" y1="215" x2="430" y2="215" class="cable-bg" />
+            <line x1="430" y1="215" x2="720" y2="215" class="cable-bg" />
+            <line x1="430" y1="215" x2="910" y2="215" class="cable-bg" />
 
-            <line id="glowA1" x1="120" y1="190" x2="430" y2="190" class="cable-glow" />
-            <line id="glowA2" x1="430" y1="190" x2="730" y2="190" class="cable-glow" />
-            <line id="glowA3" x1="430" y1="190" x2="900" y2="190" class="cable-glow" />
+            <line id="glowA1" x1="120" y1="215" x2="430" y2="215" class="cable-glow" />
+            <line id="glowA2" x1="430" y1="215" x2="720" y2="215" class="cable-glow" />
+            <line id="glowA3" x1="430" y1="215" x2="910" y2="215" class="cable-glow" />
           </g>
         </svg>
 
         <!-- Sóng Broadcast -->
         <div id="rippleWave" class="ripple-wave"></div>
 
-        <!-- Gói tin di chuyển chính + phụ (cho Broadcast LAN) -->
+        <!-- Gói tin di chuyển -->
         <div id="movingPkt" class="moving-pkt">📦 Packet</div>
         <div id="movingPkt2" class="moving-pkt">📢 ARP</div>
 
-        <!-- 4 THIẾT BỊ DYNAMIC THEO KỊCH BẢN -->
         <!-- Node 1: PC-A -->
         <div id="node1" class="node" style="left: 11%;">
           <div id="bubble1" class="bubble" style="left: 58%;"></div>
           <div id="circle1" class="node-circle">💻</div>
           <div id="title1" class="node-title">PC-A</div>
-          <div id="ip1" class="node-ip-tag">IP: 192.168.1.10</div>
+          <div id="ip1" class="node-ip-tag hidden"></div>
           <div id="mac1" class="node-tag">MAC: AA-01</div>
         </div>
 
@@ -861,7 +755,7 @@
           <div id="bubble2" class="bubble"></div>
           <div id="circle2" class="node-circle router">🧭</div>
           <div id="title2" class="node-title">Router R1</div>
-          <div id="ip2" class="node-ip-tag">GW: 192.168.1.1</div>
+          <div id="ip2" class="node-ip-tag hidden"></div>
           <div id="mac2" class="node-tag">MAC: R1-MAC</div>
         </div>
 
@@ -873,7 +767,7 @@
             <span id="portF02" class="port-badge">F0/2</span>
           </div>
           <div id="title3" class="node-title">Router R2</div>
-          <div id="ip3" class="node-ip-tag">GW: 172.10.20.1</div>
+          <div id="ip3" class="node-ip-tag hidden"></div>
           <div id="mac3" class="node-tag">MAC: R2-MAC</div>
         </div>
 
@@ -882,53 +776,27 @@
           <div id="bubble4" class="bubble" style="left: 42%;"></div>
           <div id="circle4" class="node-circle">🖥️</div>
           <div id="title4" class="node-title">PC-C</div>
-          <div id="ip4" class="node-ip-tag">IP: 172.10.20.5 (/24)</div>
+          <div id="ip4" class="node-ip-tag">IP: 172.10.20.5</div>
           <div id="mac4" class="node-tag">MAC: PC-C-MAC</div>
         </div>
 
-        <!-- Widget dưới chân 1: Bảng ARP tại PC-A / R2 -->
-        <div id="arpWidget" class="bottom-widget" style="left: 16%;">
+        <!-- Bảng ARP dưới chân -->
+        <div id="arpWidget" class="bottom-widget" style="left: 22%;">
           <div id="arpWidgetTitle" class="widget-title" style="color: var(--emerald);">📋 Bảng ARP (ARP Table)</div>
-          <div id="arpWidgetVal" class="widget-val">[Trống / Chưa biết MAC]</div>
+          <div id="arpWidgetVal" class="widget-val">[Trống]</div>
         </div>
 
-        <!-- Widget dưới chân 2: Bảng Định Tuyến tại R1 (Chỉ hiện ở Scenario B) -->
-        <div id="routingWidget" class="bottom-widget" style="left: 52%;">
+        <!-- Bảng Định Tuyến tại R1 (Chỉ hiện ở Scenario B) -->
+        <div id="routingWidget" class="bottom-widget" style="left: 58%;">
           <div id="routingWidgetTitle" class="widget-title" style="color: var(--purple);">🗺️ Bảng Định Tuyến (Router R1)</div>
-          <div id="routingWidgetVal" class="widget-val">Dest Net: 172.10.20.0/24 ➔ Next Hop: R2</div>
-        </div>
-      </div>
-
-      <!-- Thanh Encapsulation: Frame -> Bits -> Signals -->
-      <div class="layers-bar">
-        <div id="boxFrame" class="layer-box active">
-          <div id="lblLayer1" class="layer-name" style="color: var(--amber);">1. Frame (Đóng gói)</div>
-          <div id="txtFrame" class="layer-val">[MAC: ???] + [IP: 172.10.20.5]</div>
-        </div>
-
-        <div class="layer-arrow">➔</div>
-
-        <div id="boxBits" class="layer-box">
-          <div id="lblLayer2" class="layer-name" style="color: var(--emerald);">2. Bits (Nhị phân)</div>
-          <div id="txtBits" class="layer-val">10110010 01011101 11001010</div>
-        </div>
-
-        <div class="layer-arrow">➔</div>
-
-        <div id="boxSignals" class="layer-box">
-          <div id="lblLayer3" class="layer-name" style="color: var(--cyan);">3. Signals (Xung điện)</div>
-          <div style="overflow: hidden; height: 24px;">
-            <svg id="waveSvg" class="wave-svg" viewBox="0 0 400 26" preserveAspectRatio="none">
-              <path d="M 0 13 L 20 13 L 20 4 L 45 4 L 45 22 L 70 22 L 70 4 L 100 4 L 100 22 L 130 22 L 130 4 L 160 4 L 160 22 L 200 22 L 220 13 L 220 4 L 245 4 L 245 22 L 270 22 L 270 4 L 300 4 L 300 22 L 330 22 L 330 4 L 360 4 L 360 22 L 400 22" />
-            </svg>
-          </div>
+          <div id="routingWidgetVal" class="widget-val">172.10.20.0/24 ➔ Next Hop: R2</div>
         </div>
       </div>
     </section>
 
-    <!-- CỘT PHẢI: PACKET INSPECTOR PANEL -->
+    <!-- CỘT PHẢI: CHỈ 2 THẺ QUAN TRỌNG NHẤT (IP ĐÍCH & MAC ĐÍCH) -->
     <aside class="inspector-panel">
-      <div id="lblInspectorHeading" class="panel-heading">🔎 Bên Trong Gói Tin (Packet Inspector)</div>
+      <div id="lblInspectorHeading" class="panel-heading">🔎 Kiểm Tra Gói Tin (Packet Inspector)</div>
 
       <!-- THẺ 1: IP ĐÍCH (KHÔNG ĐỔI) -->
       <div class="big-card card-ip">
@@ -949,14 +817,6 @@
         <div id="valMac" class="big-value" style="color: var(--amber);">???</div>
         <div id="descMac" class="card-desc">...</div>
       </div>
-
-      <!-- TÓM TẮT HÀNH TRÌNH ĐỔI MAC -->
-      <div class="mac-steps-summary">
-        <div id="lblSummaryHeading" style="font-size: 0.92rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">
-          Hành trình thay đổi MAC Đích:
-        </div>
-        <div id="summaryList" style="display: flex; flex-direction: column; gap: 6px;"></div>
-      </div>
     </aside>
   </main>
 
@@ -967,13 +827,10 @@
   </footer>
 
   <script>
-    // =========================================================================
-    // DỮ LIỆU SONG NGỮ CHO CẢ 2 KỊCH BẢN (SCENARIO A & SCENARIO B)
-    // =========================================================================
     const UI_TEXT = {
       vi: {
-        tabA: "📢 Scenario A: Cùng Mạng LAN (Giao Thức ARP)",
-        tabB: "🌐 Scenario B: Khác Mạng Qua Nhiều Router (9 Bước)",
+        tabA: "📢 Scenario A: Cùng Mạng LAN (ARP)",
+        tabB: "🌐 Scenario B: Khác Mạng Qua Router (9 Bước)",
         stepPrefix: "BƯỚC",
         btnReset: "⏮ Làm lại",
         btnPrev: "◀ Lùi",
@@ -984,22 +841,18 @@
         spdSlow: "Chậm",
         spdNorm: "Vừa",
         spdFast: "Nhanh",
-        layer1: "1. Frame (Đóng gói)",
-        layer2: "2. Bits (Nhị phân)",
-        layer3: "3. Signals (Xung điện)",
-        inspectorHeading: "🔎 Bên Trong Gói Tin (Packet Inspector)",
+        inspectorHeading: "🔎 Kiểm Tra Gói Tin (Packet Inspector)",
         ipCardTitle: "🌐 IP Đích (Đích Cuối)",
         ipCardBadge: "🔒 KHÔNG BAO GIỜ ĐỔI",
         ipCardDesc: "Giống như <strong>tên người nhận cuối cùng</strong> ghi cố định trên phong bì thư.",
         macCardTitle: "🏷️ MAC Đích (Chặng Hiện Tại)",
         macCardBadge: "🔄 ĐỔI Ở MỖI CHẶNG",
-        summaryHeading: "Sự thay đổi của địa chỉ MAC Đích:",
         routingTitle: "🗺️ Bảng Định Tuyến (Router R1)",
-        routingRule: "Dest Net: 172.10.20.0/24 ➔ Next Hop: R2"
+        routingRule: "172.10.20.0/24 ➔ Next Hop: R2"
       },
       en: {
-        tabA: "📢 Scenario A: Same Network LAN (ARP Protocol)",
-        tabB: "🌐 Scenario B: Multi-Hop Routing Across Routers (9 Steps)",
+        tabA: "📢 Scenario A: Same Network LAN (ARP)",
+        tabB: "🌐 Scenario B: Multi-Hop Routing (9 Steps)",
         stepPrefix: "STEP",
         btnReset: "⏮ Reset",
         btnPrev: "◀ Prev",
@@ -1010,68 +863,48 @@
         spdSlow: "Slow",
         spdNorm: "Normal",
         spdFast: "Fast",
-        layer1: "1. Frame (Layer 2/3)",
-        layer2: "2. Bits (Binary 0/1)",
-        layer3: "3. Signals (Pulses)",
         inspectorHeading: "🔎 Packet / Frame Inspector",
         ipCardTitle: "🌐 Destination IP (Final Goal)",
         ipCardBadge: "🔒 NEVER CHANGES",
         ipCardDesc: "Like the <strong>final recipient's name</strong> written permanently on the envelope.",
         macCardTitle: "🏷️ Destination MAC (Current Hop)",
-        macCardBadge: "🔄 CHANGES DYNAMICALLY",
-        summaryHeading: "Destination MAC Progression:",
+        macCardBadge: "🔄 CHANGES EVERY HOP",
         routingTitle: "🗺️ Routing Table (Router R1)",
-        routingRule: "Dest Net: 172.10.20.0/24 ➔ Next Hop: R2"
+        routingRule: "172.10.20.0/24 ➔ Next Hop: R2"
       }
     };
 
     // -------------------------------------------------------------------------
-    // SCENARIO A: CÙNG MẠNG LAN (5 BƯỚC CHUẨN ARP: BROADCAST -> UNICAST REPLY -> TABLE UPDATE)
+    // SCENARIO A: CÙNG MẠNG LAN (ARP PROTOCOL)
     // -------------------------------------------------------------------------
     const SCENARIO_A = {
       destIp: "192.168.1.20 (PC-B)",
-      summaryItems: {
-        vi: [
-          { label: "1. ARP Broadcast hỏi cả LAN", mac: "FF:FF:FF:FF:FF:FF" },
-          { label: "2. PC-B trả lời ARP (Unicast)", mac: "AA-01 (Về PC-A)" },
-          { label: "3. Gửi dữ liệu thẳng tới PC-B", mac: "BB-02 (PC-B)" }
-        ],
-        en: [
-          { label: "1. ARP Request (Broadcast)", mac: "FF:FF:FF:FF:FF:FF" },
-          { label: "2. PC-B ARP Reply (Unicast)", mac: "AA-01 (To PC-A)" },
-          { label: "3. Direct Data Frame to PC-B", mac: "BB-02 (PC-B)" }
-        ]
-      },
       steps: [
         {
           activeNodes: { n1: "active-cyan" },
           motion: null,
           arpGlow: false,
-          wireActive: false,
-          sumIdx: 0,
           arpTable: {
-            vi: { title: "📋 Bảng ARP của PC-A", val: "192.168.1.20 ➔ [Trống / Chưa biết]" },
-            en: { title: "📋 PC-A Local ARP Table", val: "192.168.1.20 ➔ [Empty / Unknown]" }
+            vi: { title: "📋 Bảng ARP của PC-A", val: "192.168.1.20 ➔ [Trống]" },
+            en: { title: "📋 PC-A Local ARP Table", val: "192.168.1.20 ➔ [Empty]" }
           },
           vi: {
             title: "PC-A cần gửi tin cho PC-B trong cùng mạng LAN",
             bubbles: {
-              n1: { text: "💭 Cần gửi tin cho PC-B (192.168.1.20) cùng mạng LAN, nhưng Bảng ARP chưa có địa chỉ MAC của PC-B!", style: "" }
+              n1: { text: "💭 Cần gửi tin cho PC-B (192.168.1.20), nhưng mình chưa biết địa chỉ MAC của PC-B!", style: "" }
             },
-            macVal: "??? (Chưa biết MAC)",
-            macDesc: "PC-A biết IP của PC-B (192.168.1.20) nhưng chưa biết địa chỉ MAC vật lý.",
-            frameTxt: "[MAC: ???] + [IP: 192.168.1.20]",
-            note: "<strong>Cùng một phòng học (Cùng mạng LAN):</strong> PC-A muốn đưa thư trực tiếp cho bạn <strong>PC-B (192.168.1.20)</strong> ngồi trong cùng phòng mà không cần qua giám thị (Router). Tuy nhiên PC-A chỉ biết tên (IP) chứ chưa biết mặt (MAC) của PC-B."
+            macVal: "??? (Chưa biết)",
+            macDesc: "PC-A biết IP của PC-B (192.168.1.20) nhưng chưa biết địa chỉ MAC.",
+            note: "<strong>Cùng một phòng học (Cùng mạng LAN):</strong> PC-A muốn đưa thư cho bạn <strong>PC-B (192.168.1.20)</strong> ngồi cùng phòng. Nhưng PC-A chỉ mới biết tên (IP) chứ chưa biết mặt (MAC) của PC-B."
           },
           en: {
             title: "PC-A Prepares Data for PC-B on the Same LAN",
             bubbles: {
-              n1: { text: "💭 I want to send data to PC-B (192.168.1.20) on my local LAN, but my ARP Table is empty!", style: "" }
+              n1: { text: "💭 I need to send data to PC-B (192.168.1.20), but I don't know PC-B's MAC address!", style: "" }
             },
-            macVal: "??? (Unknown MAC)",
+            macVal: "??? (Unknown)",
             macDesc: "PC-A knows the target IP (192.168.1.20) but does not know PC-B's MAC address yet.",
-            frameTxt: "[MAC: ???] + [IP: 192.168.1.20]",
-            note: "<strong>Same Classroom (Same LAN):</strong> PC-A wants to hand a note directly to classmate <strong>PC-B (192.168.1.20)</strong> in the same room without needing a hallway monitor (Router). However, PC-A only knows PC-B's name (IP), not their face (MAC)."
+            note: "<strong>Same Classroom (Same LAN):</strong> PC-A wants to hand a note to classmate <strong>PC-B (192.168.1.20)</strong> in the same room, but only knows PC-B's name (IP), not their face (MAC)."
           }
         },
         {
@@ -1083,131 +916,101 @@
             rippleAt: 43
           },
           arpGlow: false,
-          wireActive: true,
-          sumIdx: 1,
           arpTable: {
-            vi: { title: "📋 Bảng ARP của PC-A", val: "Đang phát loa hỏi MAC của 192.168.1.20..." },
-            en: { title: "📋 PC-A Local ARP Table", val: "Broadcasting ARP for 192.168.1.20..." }
+            vi: { title: "📋 Bảng ARP của PC-A", val: "Đang hỏi MAC của 192.168.1.20..." },
+            en: { title: "📋 PC-A Local ARP Table", val: "Asking for 192.168.1.20 MAC..." }
           },
           vi: {
-            title: "PC-A phát gói tin ARP Request (Broadcast FF:FF:FF:FF:FF:FF)",
+            title: "PC-A phát ARP Request (Broadcast FF:FF:FF:FF:FF:FF)",
             bubbles: {
-              n1: { text: "📢 [ARP Broadcast] Hỏi toàn mạng LAN: Ai có IP 192.168.1.20? Cho xin địa chỉ MAC!", style: "b-arp" },
-              n4: { text: "❌ Tôi là 192.168.1.30, không phải tôi! Bỏ qua!", style: "b-drop" }
+              n1: { text: "📢 [ARP Broadcast] Ai có IP 192.168.1.20 cho xin địa chỉ MAC!", style: "b-arp" },
+              n4: { text: "❌ Không phải IP của tôi! Bỏ qua!", style: "b-drop" }
             },
             macVal: "FF:FF:FF:FF:FF:FF",
-            macDesc: "Địa chỉ Broadcast gửi tới TẤT CẢ các máy (cả PC-B và PC-D) trong mạng LAN.",
-            frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP WhoHas .20]",
-            note: "<strong>Bắc loa hỏi cả phòng (ARP Broadcast):</strong> PC-A dùng loa phóng thanh (<strong>FF:FF:FF:FF:FF:FF</strong>) hét lên cho <strong>tất cả mọi máy</strong> trong mạng LAN đều nghe thấy: <em>'Ai có IP 192.168.1.20?'</em>. Máy PC-D (.30) nghe thấy nhưng không phải tên mình nên tự bỏ qua."
+            macDesc: "Gửi Broadcast tới tất cả các máy trong mạng LAN để hỏi tìm 192.168.1.20.",
+            note: "<strong>Bắc loa hỏi cả phòng (ARP Broadcast):</strong> PC-A dùng loa phóng thanh (<strong>FF:FF:FF:FF:FF:FF</strong>) hét lên cho mọi máy trong phòng đều nghe thấy. Máy PC-D (.30) thấy không phải tên mình nên bỏ qua."
           },
           en: {
             title: "PC-A Sends Broadcast ARP Request (FF:FF:FF:FF:FF:FF)",
             bubbles: {
-              n1: { text: "📢 [ARP Broadcast] Calling all LAN hosts: Who has IP 192.168.1.20? Tell me your MAC!", style: "b-arp" },
-              n4: { text: "❌ I'm 192.168.1.30 — not my IP! Ignoring!", style: "b-drop" }
+              n1: { text: "📢 [ARP Broadcast] Who has IP 192.168.1.20? Tell me your MAC!", style: "b-arp" },
+              n4: { text: "❌ Not my IP! Ignoring!", style: "b-drop" }
             },
             macVal: "FF:FF:FF:FF:FF:FF",
-            macDesc: "Broadcast MAC sends the ARP Request to EVERY device on the LAN (both PC-B and PC-D).",
-            frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP WhoHas .20]",
-            note: "<strong>Shouting with a Megaphone (ARP Broadcast):</strong> PC-A uses a megaphone (<strong>FF:FF:FF:FF:FF:FF</strong>) so every computer in the room hears: <em>'Who is 192.168.1.20?'</em> PC-D (.30) hears it too, sees it's not its IP, and silently ignores it."
+            macDesc: "Broadcast MAC sends the ARP Request to every device on the local LAN.",
+            note: "<strong>Shouting with a Megaphone (ARP Broadcast):</strong> PC-A shouts to the whole room using Broadcast (<strong>FF:FF:FF:FF:FF:FF</strong>). PC-D (.30) sees it is not the target IP and ignores it."
           }
         },
         {
           activeNodes: { n3: "active-emerald", n1: "active-cyan" },
           motion: {
             from: 68, to: 16, glow: ["glowA2", "glowA1"], type: "reply",
-            label: "🙋‍♂️ ARP Reply (Unicast): Tôi là BB-02!"
+            label: "🙋‍♂️ ARP Reply (Unicast): BB-02"
           },
           arpGlow: false,
-          wireActive: true,
-          sumIdx: 2,
           arpTable: {
-            vi: { title: "📋 Bảng ARP của PC-A", val: "Đang nhận ARP Reply từ PC-B..." },
-            en: { title: "📋 PC-A Local ARP Table", val: "Receiving ARP Reply from PC-B..." }
+            vi: { title: "📋 Bảng ARP của PC-A", val: "Đang nhận MAC từ PC-B..." },
+            en: { title: "📋 PC-A Local ARP Table", val: "Receiving MAC from PC-B..." }
           },
           vi: {
             title: "Chỉ duy nhất PC-B trả lời bằng ARP Reply (Unicast)",
             bubbles: {
-              n3: { text: "🙋‍♂️ [ARP Reply - Unicast] Đúng IP 192.168.1.20 của tôi! Địa chỉ MAC của tôi là BB-02!", style: "b-done" },
-              n4: { text: "🤐 (Im lặng không trả lời)", style: "b-drop" }
+              n3: { text: "🙋‍♂️ [ARP Reply] Tôi là 192.168.1.20! MAC của tôi là BB-02!", style: "b-done" }
             },
-            macVal: "AA-01 (Unicast về PC-A)",
-            macDesc: "Chỉ máy đích PC-B trả lời riêng (Unicast) thẳng về MAC của PC-A, không cần phát loa.",
-            frameTxt: "[MAC: AA-01] + [ARP Reply: BB-02]",
-            note: "<strong>Chỉ người được gọi tên mới giơ tay (ARP Reply Unicast):</strong> Trong cả phòng, <strong>chỉ duy nhất PC-B (192.168.1.20)</strong> trả lời riêng (Unicast) thẳng cho PC-A: <em>'Tôi là 192.168.1.20, mặt (MAC) của tôi là BB-02!'</em>"
+            macVal: "AA-01 (Trả lời về PC-A)",
+            macDesc: "Chỉ máy đích PC-B trả lời riêng (Unicast) thẳng về cho PC-A.",
+            note: "<strong>Chỉ người được gọi tên mới giơ tay (ARP Reply Unicast):</strong> Chỉ duy nhất <strong>PC-B (192.168.1.20)</strong> trả lời riêng (Unicast) cho PC-A: <em>'Mặt (MAC) của tôi là BB-02!'</em>"
           },
           en: {
-            title: "Only Target PC-B Responds with an ARP Reply (Unicast)",
+            title: "Only Target PC-B Responds with ARP Reply (Unicast)",
             bubbles: {
-              n3: { text: "🙋‍♂️ [ARP Reply - Unicast] That's my IP (192.168.1.20)! My MAC address is BB-02!", style: "b-done" },
-              n4: { text: "🤐 (Stays silent)", style: "b-drop" }
+              n3: { text: "🙋‍♂️ [ARP Reply] I am 192.168.1.20! My MAC is BB-02!", style: "b-done" }
             },
             macVal: "AA-01 (Unicast to PC-A)",
-            macDesc: "Only the target device (PC-B) replies directly (Unicast) to PC-A with its MAC address BB-02.",
-            frameTxt: "[MAC: AA-01] + [ARP Reply: BB-02]",
-            note: "<strong>Only the Target Raises a Hand (Unicast ARP Reply):</strong> Out of the whole room, <strong>only PC-B (192.168.1.20)</strong> replies directly (Unicast) back to PC-A: <em>'I am 192.168.1.20, and my MAC address is BB-02!'</em>"
+            macDesc: "Only the target device (PC-B) replies directly (Unicast) to PC-A with its MAC (BB-02).",
+            note: "<strong>Only the Target Raises a Hand (Unicast ARP Reply):</strong> Out of the whole room, <strong>only PC-B (192.168.1.20)</strong> replies directly (Unicast) back to PC-A with its MAC address <strong>BB-02</strong>."
           }
         },
         {
           activeNodes: { n1: "active-emerald", n3: "active-emerald" },
           motion: {
             from: 16, to: 68, glow: ["glowA1", "glowA2"], type: "data",
-            label: "🎉 DATA: MAC = BB-02 | IP = 192.168.1.20"
+            label: "🎉 MAC: BB-02 | IP: 192.168.1.20"
           },
           arpGlow: true,
-          wireActive: true,
-          sumIdx: 3,
           arpTable: {
             vi: { title: "📋 Bảng ARP của PC-A (ĐÃ CẬP NHẬT!)", val: "✅ 192.168.1.20 ➔ MAC: BB-02" },
             en: { title: "📋 PC-A ARP Table (UPDATED!)", val: "✅ 192.168.1.20 ➔ MAC: BB-02" }
           },
           vi: {
-            title: "Cập nhật Bảng ARP & Gửi gói tin trực tiếp tới PC-B! 🎉",
+            title: "Cập nhật Bảng ARP & Gửi dữ liệu thẳng tới PC-B! 🎉",
             bubbles: {
-              n1: { text: "✅ Đã lưu 192.168.1.20 ➔ BB-02 vào Bảng ARP! Gửi gói tin thẳng tới PC-B!", style: "b-done" },
-              n3: { text: "🎉 Đã nhận dữ liệu thành công!", style: "b-done" }
+              n1: { text: "✅ Đã lưu BB-02 vào Bảng ARP! Gửi gói tin thẳng tới PC-B!", style: "b-done" },
+              n3: { text: "🎉 Đã nhận thành công!", style: "b-done" }
             },
             macVal: "BB-02 (PC-B)",
-            macDesc: "PC-A ghi nhớ BB-02 vào Bảng ARP và gửi thẳng gói tin tới PC-B!",
-            frameTxt: "[MAC: BB-02] + [IP: 192.168.1.20]",
-            note: "<strong>Cập nhật sổ tay ARP & Trao thư tận tay:</strong> PC-A ghi ngay <strong>192.168.1.20 ➔ BB-02</strong> vào <strong>Bảng ARP</strong> (những lần sau không cần bắc loa nữa!) rồi gửi thẳng gói tin tới PC-B."
+            macDesc: "PC-A cập nhật Bảng ARP và gửi gói tin trực tiếp tới địa chỉ MAC BB-02 của PC-B.",
+            note: "<strong>Cập nhật Bảng ARP & Trao thư tận tay:</strong> PC-A lưu <strong>192.168.1.20 ➔ BB-02</strong> vào <strong>Bảng ARP</strong> và chuyển thẳng gói tin cho PC-B!"
           },
           en: {
-            title: "Update Local ARP Table & Deliver Data Frame to PC-B! 🎉",
+            title: "Update Local ARP Table & Deliver Data to PC-B! 🎉",
             bubbles: {
-              n1: { text: "✅ Saved 192.168.1.20 ➔ BB-02 in my ARP Table! Sending data directly to PC-B!", style: "b-done" },
-              n3: { text: "🎉 Data Frame received!", style: "b-done" }
+              n1: { text: "✅ Saved BB-02 in ARP Table! Sending data directly to PC-B!", style: "b-done" },
+              n3: { text: "🎉 Data received!", style: "b-done" }
             },
             macVal: "BB-02 (PC-B)",
-            macDesc: "PC-A updates its local ARP table and sends the frame directly to PC-B's MAC (BB-02)!",
-            frameTxt: "[MAC: BB-02] + [IP: 192.168.1.20]",
-            note: "<strong>ARP Table Updated & Direct Delivery:</strong> PC-A records <strong>192.168.1.20 ➔ BB-02</strong> in its <strong>local ARP Table</strong> (so it won't need the megaphone next time!) and sends the frame straight to PC-B."
+            macDesc: "PC-A updates its local ARP table and sends the packet directly to PC-B (BB-02).",
+            note: "<strong>ARP Table Updated & Direct Delivery:</strong> PC-A saves <strong>192.168.1.20 ➔ BB-02</strong> in its <strong>ARP Table</strong> and delivers the frame straight to PC-B!"
           }
         }
       ]
     };
 
     // -------------------------------------------------------------------------
-    // SCENARIO B: KHÁC MẠNG QUA NHIỀU ROUTER (ĐÚNG 9 BƯỚC THEO YÊU CẦU)
+    // SCENARIO B: KHÁC MẠNG QUA NHIỀU ROUTER (9 BƯỚC)
     // -------------------------------------------------------------------------
     const SCENARIO_B = {
       destIp: "172.10.20.5 (PC-C)",
-      summaryItems: {
-        vi: [
-          { label: "Bước 1: ARP Broadcast tìm R1", mac: "FF:FF:FF:FF:FF:FF" },
-          { label: "Bước 2-3: Chặng 1 (PC-A ➔ R1)", mac: "R1-MAC" },
-          { label: "Bước 4-6: Chặng 2 (R1 ➔ R2 F0/2)", mac: "R2-MAC" },
-          { label: "Bước 7-8: R2 phát ARP tìm PC-C", mac: "FF:FF:FF:FF:FF:FF" },
-          { label: "Bước 9: Chặng cuối (R2 ➔ PC-C)", mac: "PC-C-MAC" }
-        ],
-        en: [
-          { label: "Step 1: ARP Broadcast for R1", mac: "FF:FF:FF:FF:FF:FF" },
-          { label: "Step 2-3: Hop 1 (PC-A ➔ R1)", mac: "R1-MAC" },
-          { label: "Step 4-6: Hop 2 (R1 ➔ R2 F0/2)", mac: "R2-MAC" },
-          { label: "Step 7-8: R2 ARP Broadcast for PC-C", mac: "FF:FF:FF:FF:FF:FF" },
-          { label: "Step 9: Final Delivery (R2 ➔ PC-C)", mac: "PC-C-MAC" }
-        ]
-      },
       steps: [
         // STEP 1
         {
@@ -1216,31 +1019,27 @@
           r1Glow: false,
           arpGlow: false,
           portActive: false,
-          wireActive: true,
-          sumIdx: 1,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại PC-A", val: "Đang tìm MAC của Gateway R1..." },
-            en: { title: "📋 PC-A ARP Table", val: "Looking up Gateway R1 MAC..." }
+            vi: { title: "📋 Bảng ARP tại PC-A", val: "Đang tìm MAC của R1..." },
+            en: { title: "📋 PC-A ARP Table", val: "Finding R1 MAC..." }
           },
           vi: {
             title: "Bước 1: PC-A đóng gói dữ liệu & phát ARP tìm Default Gateway (R1)",
             bubbles: {
-              n1: { text: "📢 [ARP Broadcast] Đích 172.10.20.5 khác mạng! Ai là Default Gateway R1 cho xin MAC!", style: "b-arp" }
+              n1: { text: "📢 [ARP Broadcast] Đích 172.10.20.5 khác mạng! Ai là Router R1 cho xin MAC!", style: "b-arp" }
             },
             macVal: "FF:FF:FF:FF:FF:FF",
-            macDesc: "PC-A phát ARP Broadcast để tìm địa chỉ MAC của cổng mặc định (Router R1).",
-            frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Hỏi R1]",
-            note: "<strong>Bước 1 — Biết tên người nhận nhưng cần tìm lớp trưởng R1:</strong> PC-A muốn gửi gói tin tới <strong>PC-C (172.10.20.5)</strong> ở mạng khác. Để ra khỏi phòng, PC-A bắc loa <strong>ARP Broadcast (FF:FF:FF:FF:FF:FF)</strong> để hỏi tìm mặt (MAC) của Default Gateway là <strong>Router R1</strong>."
+            macDesc: "PC-A phát ARP Broadcast để tìm địa chỉ MAC của Default Gateway (Router R1).",
+            note: "<strong>Bước 1 — Tìm lớp trưởng R1:</strong> PC-A muốn gửi gói tin tới <strong>PC-C (172.10.20.5)</strong> ở mạng khác. Để ra khỏi phòng, PC-A bắc loa <strong>ARP Broadcast (FF:FF:FF:FF:FF:FF)</strong> để hỏi tìm mặt (MAC) của <strong>Router R1</strong>."
           },
           en: {
             title: "Step 1: PC-A Packages Data & Broadcasts ARP for Default Gateway (R1)",
             bubbles: {
-              n1: { text: "📢 [ARP Broadcast] 172.10.20.5 is on another network! Who is Default Gateway R1? Tell me your MAC!", style: "b-arp" }
+              n1: { text: "📢 [ARP Broadcast] 172.10.20.5 is on a different network! Who is Router R1?", style: "b-arp" }
             },
             macVal: "FF:FF:FF:FF:FF:FF",
-            macDesc: "PC-A broadcasts an ARP Request to discover the MAC address of its Default Gateway (Router R1).",
-            frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP Request R1]",
-            note: "<strong>Step 1 — Finding the First Room Monitor (R1):</strong> PC-A wants to send data to <strong>PC-C (172.10.20.5)</strong> on a remote network. To leave its LAN, PC-A uses a megaphone (<strong>FF:FF:FF:FF:FF:FF</strong>) to find the MAC address of its default gateway, <strong>Router R1</strong>."
+            macDesc: "PC-A broadcasts an ARP Request to find the MAC address of its Default Gateway (Router R1).",
+            note: "<strong>Step 1 — Finding Room Monitor R1:</strong> To reach <strong>PC-C (172.10.20.5)</strong> on another network, PC-A uses a megaphone (<strong>FF:FF:FF:FF:FF:FF</strong>) to find the MAC address of its default gateway, <strong>Router R1</strong>."
           }
         },
         // STEP 2
@@ -1250,33 +1049,29 @@
           r1Glow: false,
           arpGlow: true,
           portActive: false,
-          wireActive: true,
-          sumIdx: 2,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại PC-A", val: "✅ Gateway R1 ➔ MAC: R1-MAC" },
-            en: { title: "📋 PC-A ARP Table", val: "✅ Gateway R1 ➔ MAC: R1-MAC" }
+            vi: { title: "📋 Bảng ARP tại PC-A", val: "✅ Gateway R1 ➔ R1-MAC" },
+            en: { title: "📋 PC-A ARP Table", val: "✅ Gateway R1 ➔ R1-MAC" }
           },
           vi: {
-            title: "Bước 2: R1 trả lời MAC & PC-A gửi Frame chặng 1 tới Router R1",
+            title: "Bước 2: R1 trả lời MAC & PC-A gửi gói tin tới Router R1",
             bubbles: {
               n2: { text: "👋 MAC của tôi là R1-MAC!", style: "b-done" },
-              n1: { text: "📦 Đã có R1-MAC! Đóng gói gửi tới R1 (IP Đích vẫn là 172.10.20.5).", style: "" }
+              n1: { text: "📦 Đã có R1-MAC! Gửi gói tin cho R1.", style: "" }
             },
             macVal: "R1-MAC (Router R1)",
-            macDesc: "Gói tin được đóng vào Frame với MAC Đích là R1-MAC để đi từ PC-A tới R1.",
-            frameTxt: "[MAC: R1-MAC] + [IP: 172.10.20.5]",
-            note: "<strong>Bước 2 — Trao tay chặng 1 (PC-A ➔ R1):</strong> Sau khi R1 báo lại địa chỉ <strong>R1-MAC</strong>, PC-A đóng gói dữ liệu với <strong>IP Đích giữ nguyên (172.10.20.5)</strong> và <strong>MAC Đích là R1-MAC</strong> rồi truyền qua dây cáp tới R1."
+            macDesc: "Gói tin mang MAC Đích là R1-MAC để đi từ PC-A tới Router R1.",
+            note: "<strong>Bước 2 — Trao tay chặng 1 (PC-A ➔ R1):</strong> R1 báo lại địa chỉ <strong>R1-MAC</strong>. PC-A giữ nguyên <strong>IP Đích (172.10.20.5)</strong> và dán nhãn <strong>MAC Đích là R1-MAC</strong> để gửi tới R1."
           },
           en: {
             title: "Step 2: R1 Replies with MAC & PC-A Sends Frame to Router R1",
             bubbles: {
               n2: { text: "👋 My MAC is R1-MAC!", style: "b-done" },
-              n1: { text: "📦 Got R1-MAC! Sending Frame to R1 (Dest IP is 172.10.20.5).", style: "" }
+              n1: { text: "📦 Got R1-MAC! Sending Frame to R1.", style: "" }
             },
             macVal: "R1-MAC (Router R1)",
-            macDesc: "PC-A encapsulates the packet with Destination MAC = R1-MAC and sends it to Router R1.",
-            frameTxt: "[MAC: R1-MAC] + [IP: 172.10.20.5]",
-            note: "<strong>Step 2 — Hand-off to Router R1:</strong> Once R1 replies with <strong>R1-MAC</strong>, PC-A wraps the packet with <strong>Constant Dest IP (172.10.20.5)</strong> and <strong>Dest MAC = R1-MAC</strong>, converting Frame ➔ Bits ➔ Signals to R1."
+            macDesc: "PC-A sets Destination MAC = R1-MAC and sends the frame to Router R1.",
+            note: "<strong>Step 2 — Hand-off to Router R1:</strong> R1 replies with <strong>R1-MAC</strong>. PC-A keeps <strong>Dest IP (172.10.20.5)</strong> constant and sets <strong>Dest MAC = R1-MAC</strong> to send the frame to R1."
           }
         },
         // STEP 3
@@ -1286,31 +1081,27 @@
           r1Glow: true,
           arpGlow: false,
           portActive: false,
-          wireActive: false,
-          sumIdx: 2,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại PC-A", val: "Gateway R1 ➔ MAC: R1-MAC" },
-            en: { title: "📋 PC-A ARP Table", val: "Gateway R1 ➔ MAC: R1-MAC" }
+            vi: { title: "📋 Bảng ARP tại PC-A", val: "Gateway R1 ➔ R1-MAC" },
+            en: { title: "📋 PC-A ARP Table", val: "Gateway R1 ➔ R1-MAC" }
           },
           vi: {
-            title: "Bước 3: R1 nhận Frame, bóc vỏ MAC, kiểm tra IP & tra Bảng Định Tuyến",
+            title: "Bước 3: R1 bóc vỏ MAC cũ, kiểm tra IP & tra Bảng Định Tuyến",
             bubbles: {
-              n2: { text: "🔍 Bóc vỏ R1-MAC! Xem IP đích 172.10.20.5... Tra Bảng Định Tuyến: 172.10.20.0/24 ➔ Next Hop là R2!", style: "b-route" }
+              n2: { text: "🔍 Xem IP đích 172.10.20.5... Tra Bảng Định Tuyến: 172.10.20.0/24 ➔ Đi tiếp sang R2!", style: "b-route" }
             },
-            macVal: "[Đã bóc vỏ R1-MAC]",
-            macDesc: "R1 gỡ bỏ lớp vỏ Frame cũ và tra Bảng Định Tuyến (172.10.20.0/24 ➔ Next Hop: R2).",
-            frameTxt: "[Đang tra Routing Table tại R1...]",
-            note: "<strong>Bước 3 — R1 bóc vỏ & tra biển chỉ đường (Routing Table):</strong> R1 tháo bỏ nhãn MAC cũ của chặng 1, đọc <strong>IP Đích 172.10.20.5</strong> và tra <strong>Bảng Định Tuyến</strong>: Muốn tới mạng <strong>172.10.20.0/24</strong> thì điểm nhảy kế tiếp (Next Hop) là <strong>Router R2</strong>."
+            macVal: "[Bóc vỏ tại R1]",
+            macDesc: "R1 gỡ bỏ lớp vỏ MAC cũ và tra Bảng Định Tuyến (172.10.20.0/24 ➔ Next Hop: R2).",
+            note: "<strong>Bước 3 — R1 tra biển chỉ đường (Routing Table):</strong> R1 bóc bỏ nhãn MAC cũ, đọc <strong>IP Đích 172.10.20.5</strong> và tra <strong>Bảng Định Tuyến</strong>: Muốn tới <strong>172.10.20.0/24</strong> thì chuyển tiếp cho <strong>Router R2</strong>."
           },
           en: {
             title: "Step 3: R1 Unwraps Frame, Checks Dest IP & Consults Routing Table",
             bubbles: {
-              n2: { text: "🔍 Unwrapped old MAC! Checking IP 172.10.20.5 in Routing Table: 172.10.20.0/24 ➔ Next Hop: R2!", style: "b-route" }
+              n2: { text: "🔍 Checking IP 172.10.20.5 in Routing Table: 172.10.20.0/24 ➔ Next Hop: R2!", style: "b-route" }
             },
             macVal: "[Unwrapped at R1]",
-            macDesc: "R1 strips the Hop 1 Frame header and matches Dest Net 172.10.20.0/24 -> Next Hop: R2.",
-            frameTxt: "[R1 Consulting Routing Table...]",
-            note: "<strong>Step 3 — Checking the Hallway Map (Routing Table):</strong> R1 unwraps the old MAC sticky note, inspects <strong>Dest IP 172.10.20.5</strong>, and checks its <strong>Routing Table</strong>: To reach <strong>172.10.20.0/24</strong>, the Next Hop is <strong>Router R2</strong>."
+            macDesc: "R1 strips the old MAC header and matches Dest Net 172.10.20.0/24 -> Next Hop: R2.",
+            note: "<strong>Step 3 — Consulting the Routing Table:</strong> R1 peels off the old MAC label, reads <strong>Dest IP 172.10.20.5</strong>, and sees in its <strong>Routing Table</strong> that the Next Hop is <strong>Router R2</strong>."
           }
         },
         // STEP 4
@@ -1320,31 +1111,27 @@
           r1Glow: false,
           arpGlow: false,
           portActive: false,
-          wireActive: true,
-          sumIdx: 3,
           arpTable: {
-            vi: { title: "📋 Trạng thái định tuyến", val: "R1 đang chuyển gói tin sang R2" },
-            en: { title: "📋 Forwarding Status", val: "R1 forwarding frame to R2" }
+            vi: { title: "📋 Trạng thái", val: "R1 chuyển gói tin sang R2" },
+            en: { title: "📋 Status", val: "R1 forwarding to R2" }
           },
           vi: {
-            title: "Bước 4: Router R1 đóng gói Frame mới (MAC: R2-MAC) và chuyển sang R2",
+            title: "Bước 4: Router R1 dán MAC mới (R2-MAC) và chuyển tiếp sang R2",
             bubbles: {
-              n2: { text: "🏷️ Đóng vào Frame mới với MAC Đích = R2-MAC và chuyển tiếp sang Router R2!", style: "" }
+              n2: { text: "🏷️ Đổi MAC Đích = R2-MAC và chuyển sang Router R2!", style: "" }
             },
             macVal: "R2-MAC (Router R2)",
-            macDesc: "R1 đổi MAC Đích thành R2-MAC, trong khi IP Đích (172.10.20.5) giữ nguyên không đổi!",
-            frameTxt: "[MAC: R2-MAC] + [IP: 172.10.20.5]",
-            note: "<strong>Bước 4 — Dán nhãn MAC mới cho chặng 2 (R1 ➔ R2):</strong> R1 giữ nguyên phong bì <strong>IP Đích 172.10.20.5</strong>, chỉ dán nhãn <strong>MAC Đích mới là R2-MAC</strong> rồi chuyển gói tin sang cho Router R2."
+            macDesc: "R1 đổi MAC Đích thành R2-MAC, còn IP Đích (172.10.20.5) vẫn giữ nguyên!",
+            note: "<strong>Bước 4 — Đổi MAC, Giữ nguyên IP (R1 ➔ R2):</strong> R1 giữ nguyên <strong>IP Đích 172.10.20.5</strong>, chỉ dán nhãn <strong>MAC Đích mới là R2-MAC</strong> để chuyển gói tin sang Router R2."
           },
           en: {
-            title: "Step 4: Router R1 Re-Frames Packet (Dest MAC: R2-MAC) & Forwards to R2",
+            title: "Step 4: Router R1 Forwards Frame (Dest MAC: R2-MAC) to R2",
             bubbles: {
-              n2: { text: "🏷️ Wrapping packet with new Dest MAC = R2-MAC and forwarding to Router R2!", style: "" }
+              n2: { text: "🏷️ Setting new Dest MAC = R2-MAC and forwarding to Router R2!", style: "" }
             },
             macVal: "R2-MAC (Router R2)",
-            macDesc: "R1 updates Destination MAC to R2-MAC while keeping Destination IP (172.10.20.5) untouched!",
-            frameTxt: "[MAC: R2-MAC] + [IP: 172.10.20.5]",
-            note: "<strong>Step 4 — Fresh Sticky Note for Hop 2 (R1 ➔ R2):</strong> R1 never alters <strong>Dest IP 172.10.20.5</strong>; it simply places a new outer <strong>Dest MAC label (R2-MAC)</strong> to pass the packet across the link to Router R2."
+            macDesc: "R1 updates Destination MAC to R2-MAC while keeping Destination IP (172.10.20.5) constant!",
+            note: "<strong>Step 4 — New MAC, Same IP (R1 ➔ R2):</strong> R1 keeps <strong>Dest IP 172.10.20.5</strong> unchanged and puts on a new <strong>Dest MAC label (R2-MAC)</strong> to pass the packet to Router R2."
           }
         },
         // STEP 5
@@ -1354,31 +1141,27 @@
           r1Glow: false,
           arpGlow: false,
           portActive: true,
-          wireActive: false,
-          sumIdx: 3,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại R2 (Cổng F0/2)", val: "172.10.20.5 ➔ [Chưa biết MAC]" },
-            en: { title: "📋 R2 ARP Table (Port F0/2)", val: "172.10.20.5 ➔ [Unknown MAC]" }
+            vi: { title: "📋 Bảng ARP tại R2 (F0/2)", val: "172.10.20.5 ➔ [Trống]" },
+            en: { title: "📋 R2 ARP Table (F0/2)", val: "172.10.20.5 ➔ [Empty]" }
           },
           vi: {
-            title: "Bước 5: Router R2 nhận gói tin và nhận diện mạng đích ở cổng F0/2",
+            title: "Bước 5: Router R2 nhận gói tin và xác định mạng đích nối ở cổng F0/2",
             bubbles: {
-              n3: { text: "🎯 Đã nhận gói tin! IP 172.10.20.5 thuộc mạng 172.10.20.0/24 nối trực tiếp ở cổng F0/2 của tôi!", style: "b-route" }
+              n3: { text: "🎯 Đã nhận! Mạng 172.10.20.0/24 nối trực tiếp ngay tại cổng F0/2 của tôi!", style: "b-route" }
             },
             macVal: "[Đang xử lý tại R2]",
-            macDesc: "R2 bóc vỏ Frame chặng 2 và xác định mạng 172.10.20.0/24 nối trực tiếp với cổng F0/2.",
-            frameTxt: "[R2 kiểm tra cổng kết nối trực tiếp F0/2]",
-            note: "<strong>Bước 5 — R2 nhận ra phòng học của mình:</strong> R2 mở gói tin, đọc <strong>IP 172.10.20.5</strong> (Subnet 255.255.255.0) và thấy mạng <strong>172.10.20.0/24</strong> được nối trực tiếp ngay tại <strong>cổng F0/2</strong> bên phải của mình."
+            macDesc: "R2 bóc vỏ MAC cũ và thấy mạng 172.10.20.0/24 nối trực tiếp vào cổng F0/2.",
+            note: "<strong>Bước 5 — R2 nhận ra phòng học của mình:</strong> R2 đọc <strong>IP 172.10.20.5</strong> và nhận ra mạng <strong>172.10.20.0/24</strong> được nối trực tiếp ngay tại <strong>cổng F0/2</strong> của mình."
           },
           en: {
-            title: "Step 5: Router R2 Receives Packet & Identifies Directly Connected Port F0/2",
+            title: "Step 5: Router R2 Receives Packet & Matches Directly Connected Port F0/2",
             bubbles: {
-              n3: { text: "🎯 Packet received! 172.10.20.5 belongs to subnet 172.10.20.0/24 on my directly connected port F0/2!", style: "b-route" }
+              n3: { text: "🎯 Received! Subnet 172.10.20.0/24 is directly connected on my Port F0/2!", style: "b-route" }
             },
             macVal: "[Processing at R2]",
-            macDesc: "R2 unwraps the Hop 2 frame and sees 172.10.20.0/24 is directly connected on Port F0/2.",
-            frameTxt: "[R2 Inspecting Directly Connected Port F0/2]",
-            note: "<strong>Step 5 — Arriving at the Destination Classroom:</strong> R2 unwraps the frame, checks <strong>IP 172.10.20.5</strong>, and sees that subnet <strong>172.10.20.0/24</strong> is directly connected to its own <strong>Port F0/2</strong>."
+            macDesc: "R2 unwraps the frame and sees 172.10.20.0/24 is directly connected on Port F0/2.",
+            note: "<strong>Step 5 — Arriving at the Destination Subnet:</strong> R2 inspects <strong>IP 172.10.20.5</strong> and sees that subnet <strong>172.10.20.0/24</strong> is directly connected to its own <strong>Port F0/2</strong>."
           }
         },
         // STEP 6
@@ -1388,31 +1171,27 @@
           r1Glow: false,
           arpGlow: false,
           portActive: true,
-          wireActive: false,
-          sumIdx: 3,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại R2 (Cổng F0/2)", val: "⚠️ Chưa có MAC của 172.10.20.5!" },
-            en: { title: "📋 R2 ARP Table (Port F0/2)", val: "⚠️ Missing MAC for 172.10.20.5!" }
+            vi: { title: "📋 Bảng ARP tại R2 (F0/2)", val: "⚠️ Chưa biết MAC của 172.10.20.5" },
+            en: { title: "📋 R2 ARP Table (F0/2)", val: "⚠️ Missing MAC for 172.10.20.5" }
           },
           vi: {
             title: "Bước 6: R2 đưa gói tin ra cổng F0/2 nhưng chưa biết MAC của PC-C",
             bubbles: {
-              n3: { text: "🔌 Đã chuyển gói tin ra cổng F0/2! Nhưng khoan... Bảng ARP của tôi chưa có địa chỉ MAC của 172.10.20.5!", style: "b-arp" }
+              n3: { text: "🔌 Đã chuyển ra cổng F0/2! Nhưng tôi chưa có địa chỉ MAC của 172.10.20.5!", style: "b-arp" }
             },
             macVal: "??? (Cần tìm MAC PC-C)",
-            macDesc: "Để gửi ra cổng F0/2 tới PC-C, R2 bắt buộc phải tìm địa chỉ MAC thực tế của 172.10.20.5.",
-            frameTxt: "[Cổng F0/2: Chờ tìm MAC của 172.10.20.5]",
-            note: "<strong>Bước 6 — Đứng trước cửa phòng thông qua cổng F0/2:</strong> R2 đã đưa lá thư ra <strong>cổng F0/2</strong> (cửa phòng 172.10.20.0/24), nhưng R2 chỉ biết tên người nhận là <strong>172.10.20.5</strong> chứ chưa biết mặt (MAC) của PC-C để trao tận tay."
+            macDesc: "R2 đưa gói tin ra cổng F0/2 và chuẩn bị dùng ARP để tìm địa chỉ MAC của PC-C.",
+            note: "<strong>Bước 6 — Đứng ở cổng F0/2:</strong> R2 đã đưa thư ra <strong>cổng F0/2</strong>, nhưng R2 chỉ mới biết tên người nhận là <strong>172.10.20.5</strong> chứ chưa biết mặt (MAC) của PC-C."
           },
           en: {
-            title: "Step 6: R2 Switches Packet to Port F0/2 (Needs PC-C's MAC Address)",
+            title: "Step 6: R2 Forwards Packet to Port F0/2 (Needs PC-C's MAC)",
             bubbles: {
-              n3: { text: "🔌 Switched packet to Port F0/2! Wait... I don't have 172.10.20.5's MAC address in my ARP table yet!", style: "b-arp" }
+              n3: { text: "🔌 Switched to Port F0/2! Wait... I don't know 172.10.20.5's MAC address yet!", style: "b-arp" }
             },
             macVal: "??? (Need PC-C's MAC)",
-            macDesc: "R2 queues the packet on Port F0/2 and prepares an ARP Request to find PC-C's MAC.",
-            frameTxt: "[Port F0/2: Waiting for 172.10.20.5 MAC]",
-            note: "<strong>Step 6 — Standing at Port F0/2 Doorway:</strong> R2 moves the package to its <strong>Port F0/2</strong> exit, ready to hand it to <strong>172.10.20.5 (PC-C)</strong> — but R2 doesn't know what PC-C's face (MAC) looks like yet!"
+            macDesc: "R2 moves the packet to Port F0/2 and prepares an ARP Request to find PC-C's MAC.",
+            note: "<strong>Step 6 — Ready at Port F0/2:</strong> R2 forwards the packet to its <strong>Port F0/2</strong> interface, but still needs to find <strong>PC-C's physical MAC address</strong>."
           }
         },
         // STEP 7
@@ -1422,31 +1201,27 @@
           r1Glow: false,
           arpGlow: false,
           portActive: true,
-          wireActive: true,
-          sumIdx: 4,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại R2 (Cổng F0/2)", val: "Đang phát ARP Broadcast tìm 172.10.20.5..." },
-            en: { title: "📋 R2 ARP Table (Port F0/2)", val: "Broadcasting ARP for 172.10.20.5..." }
+            vi: { title: "📋 Bảng ARP tại R2 (F0/2)", val: "Đang phát ARP tìm 172.10.20.5..." },
+            en: { title: "📋 R2 ARP Table (F0/2)", val: "Broadcasting ARP for 172.10.20.5..." }
           },
           vi: {
             title: "Bước 7: R2 phát ARP Request (Broadcast) trong mạng 172.10.20.0/24",
             bubbles: {
-              n3: { text: "📢 [ARP Broadcast qua F0/2] Hỏi mạng 172.10.20.0/24: Ai có IP 172.10.20.5? Cho xin MAC!", style: "b-arp" }
+              n3: { text: "📢 [ARP Broadcast] Hỏi mạng 172.10.20.0/24: Ai có IP 172.10.20.5 cho xin MAC!", style: "b-arp" }
             },
             macVal: "FF:FF:FF:FF:FF:FF",
-            macDesc: "R2 phát gói tin ARP Broadcast (FF:FF:FF:FF:FF:FF) ra cổng F0/2 để tìm PC-C.",
-            frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP WhoHas 172.10.20.5]",
-            note: "<strong>Bước 7 — Bắc loa hỏi trong mạng đích 172.10.20.0/24:</strong> Từ cổng F0/2, R2 dùng loa phóng thanh (<strong>FF:FF:FF:FF:FF:FF</strong>) hỏi cả phòng đích: <em>'Trong phòng 172.10.20.0/24 ai là 172.10.20.5 thì cho xin địa chỉ MAC!'</em>"
+            macDesc: "R2 phát loa ARP Broadcast (FF:FF:FF:FF:FF:FF) ra cổng F0/2 để tìm PC-C.",
+            note: "<strong>Bước 7 — Bắc loa hỏi trong phòng đích:</strong> Từ cổng F0/2, R2 dùng loa phóng thanh (<strong>FF:FF:FF:FF:FF:FF</strong>) hỏi cả mạng <strong>172.10.20.0/24</strong> xem ai là <strong>172.10.20.5</strong>."
           },
           en: {
             title: "Step 7: R2 Broadcasts Local ARP Request on 172.10.20.0/24 Subnet",
             bubbles: {
-              n3: { text: "📢 [ARP Broadcast on F0/2] Calling 172.10.20.0/24 subnet: Who has IP 172.10.20.5?", style: "b-arp" }
+              n3: { text: "📢 [ARP Broadcast] Calling 172.10.20.0/24: Who has IP 172.10.20.5?", style: "b-arp" }
             },
             macVal: "FF:FF:FF:FF:FF:FF",
-            macDesc: "R2 sends a Broadcast ARP Request (FF:FF:FF:FF:FF:FF) out of Port F0/2 into 172.10.20.0/24.",
-            frameTxt: "[MAC: FF:FF:FF:FF:FF:FF] + [ARP WhoHas 172.10.20.5]",
-            note: "<strong>Step 7 — Megaphone in the Destination Subnet:</strong> Out of Port F0/2, R2 uses a megaphone (<strong>FF:FF:FF:FF:FF:FF</strong>) to ask everyone in the <strong>172.10.20.0/24</strong> room: <em>'Who here has IP 172.10.20.5?'</em>"
+            macDesc: "R2 sends a Broadcast ARP Request (FF:FF:FF:FF:FF:FF) out of Port F0/2.",
+            note: "<strong>Step 7 — Megaphone in the Destination Room:</strong> R2 broadcasts an ARP Request (<strong>FF:FF:FF:FF:FF:FF</strong>) into the <strong>172.10.20.0/24</strong> subnet asking for <strong>172.10.20.5's MAC</strong>."
           }
         },
         // STEP 8
@@ -1456,33 +1231,27 @@
           r1Glow: false,
           arpGlow: true,
           portActive: true,
-          wireActive: true,
-          sumIdx: 4,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại R2 (CẬP NHẬT!)", val: "✅ 172.10.20.5 ➔ MAC: PC-C-MAC" },
-            en: { title: "📋 R2 ARP Table (UPDATED!)", val: "✅ 172.10.20.5 ➔ MAC: PC-C-MAC" }
+            vi: { title: "📋 Bảng ARP tại R2 (CẬP NHẬT!)", val: "✅ 172.10.20.5 ➔ PC-C-MAC" },
+            en: { title: "📋 R2 ARP Table (UPDATED!)", val: "✅ 172.10.20.5 ➔ PC-C-MAC" }
           },
           vi: {
-            title: "Bước 8: PC-C trả lời ARP Reply (Unicast) với địa chỉ PC-C-MAC",
+            title: "Bước 8: PC-C trả lời ARP Reply (Unicast) báo địa chỉ PC-C-MAC",
             bubbles: {
-              n4: { text: "🙋‍♂️ [ARP Reply] Tôi là 172.10.20.5 đây! Địa chỉ MAC của tôi là PC-C-MAC!", style: "b-done" },
-              n3: { text: "✅ Đã lưu 172.10.20.5 ➔ PC-C-MAC vào Bảng ARP!", style: "b-done" }
+              n4: { text: "🙋‍♂️ Tôi là 172.10.20.5! MAC của tôi là PC-C-MAC!", style: "b-done" }
             },
-            macVal: "R2-MAC (ARP Reply về R2)",
-            macDesc: "PC-C gửi trả lời Unicast trực tiếp về cho cổng F0/2 của R2 để báo MAC là PC-C-MAC.",
-            frameTxt: "[MAC: R2-MAC] + [ARP Reply: PC-C-MAC]",
-            note: "<strong>Bước 8 — PC-C giơ tay trả lời:</strong> Nghe thấy tên mình, <strong>PC-C (172.10.20.5)</strong> trả lời riêng (Unicast) lại cho R2: <em>'Mặt (MAC) của tôi là PC-C-MAC!'</em>. R2 lưu ngay vào Bảng ARP."
+            macVal: "R2-MAC (Báo về R2)",
+            macDesc: "PC-C gửi ARP Reply (Unicast) báo cho R2 biết địa chỉ thực của mình là PC-C-MAC.",
+            note: "<strong>Bước 8 — PC-C giơ tay trả lời:</strong> <strong>PC-C (172.10.20.5)</strong> trả lời riêng cho R2: <em>'Mặt (MAC) của tôi là PC-C-MAC!'</em>. R2 lưu ngay vào Bảng ARP."
           },
           en: {
             title: "Step 8: PC-C Responds with Unicast ARP Reply (PC-C-MAC)",
             bubbles: {
-              n4: { text: "🙋‍♂️ [ARP Reply] I am 172.10.20.5! My MAC address is PC-C-MAC!", style: "b-done" },
-              n3: { text: "✅ Recorded 172.10.20.5 ➔ PC-C-MAC in my ARP Table!", style: "b-done" }
+              n4: { text: "🙋‍♂️ I am 172.10.20.5! My MAC is PC-C-MAC!", style: "b-done" }
             },
-            macVal: "R2-MAC (ARP Reply to R2)",
-            macDesc: "PC-C sends a Unicast ARP Reply back to R2's F0/2 port with its MAC address (PC-C-MAC).",
-            frameTxt: "[MAC: R2-MAC] + [ARP Reply: PC-C-MAC]",
-            note: "<strong>Step 8 — PC-C Raises a Hand:</strong> Hearing its own IP, <strong>PC-C (172.10.20.5)</strong> replies directly (Unicast) to R2: <em>'My MAC address is PC-C-MAC!'</em> R2 updates its ARP table."
+            macVal: "R2-MAC (Reply to R2)",
+            macDesc: "PC-C sends a Unicast ARP Reply back to R2 containing its actual MAC (PC-C-MAC).",
+            note: "<strong>Step 8 — PC-C Raises a Hand:</strong> <strong>PC-C (172.10.20.5)</strong> replies directly to R2 with its MAC address (<strong>PC-C-MAC</strong>), and R2 updates its ARP Table."
           }
         },
         // STEP 9
@@ -1492,48 +1261,41 @@
           r1Glow: false,
           arpGlow: false,
           portActive: true,
-          wireActive: true,
-          sumIdx: 5,
           arpTable: {
-            vi: { title: "📋 Bảng ARP tại R2 (Cổng F0/2)", val: "✅ 172.10.20.5 ➔ MAC: PC-C-MAC" },
-            en: { title: "📋 R2 ARP Table (Port F0/2)", val: "✅ 172.10.20.5 ➔ MAC: PC-C-MAC" }
+            vi: { title: "📋 Bảng ARP tại R2 (F0/2)", val: "✅ 172.10.20.5 ➔ PC-C-MAC" },
+            en: { title: "📋 R2 ARP Table (F0/2)", val: "✅ 172.10.20.5 ➔ PC-C-MAC" }
           },
           vi: {
-            title: "Bước 9: Chặng cuối — R2 giao gói tin tới tận tay PC-C (172.10.20.5)! 🎉",
+            title: "Bước 9: Chặng cuối — R2 giao gói tin tới tận tay PC-C! 🎉",
             bubbles: {
-              n3: { text: "🚀 Đóng Frame cuối với MAC Đích = PC-C-MAC và gửi qua cổng F0/2!", style: "" },
-              n4: { text: "🎉 Đã nhận thành công! Đúng MAC (PC-C-MAC) và đúng IP (172.10.20.5)!", style: "b-done" }
+              n3: { text: "🚀 Gửi gói tin với MAC Đích = PC-C-MAC!", style: "" },
+              n4: { text: "🎉 Đã nhận thành công!", style: "b-done" }
             },
             macVal: "PC-C-MAC (PC-C)",
-            macDesc: "Gói tin đã tới đích! IP Đích (172.10.20.5) không hề thay đổi, còn MAC Đích đã đổi ở mỗi chặng!",
-            frameTxt: "[MAC: PC-C-MAC] + [IP: 172.10.20.5]",
-            note: "<strong>Bước 9 — TỔNG KẾT QUAN TRỌNG NHẤT:</strong> Suốt 9 bước từ PC-A qua R1, R2 tới PC-C: <strong>IP Đích (172.10.20.5) luôn giữ nguyên từ đầu đến cuối</strong>, trong khi <strong>MAC Đích thay đổi động ở từng chặng</strong> để dẫn gói tin qua từng thiết bị!"
+            macDesc: "Tới đích! IP Đích (172.10.20.5) giữ nguyên từ đầu đến cuối, còn MAC Đích đổi ở mỗi chặng!",
+            note: "<strong>Bước 9 — TỔNG KẾT CỐT LÕI:</strong> Suốt hành trình từ PC-A đến PC-C: <strong>IP Đích (172.10.20.5) luôn giữ nguyên</strong>, còn <strong>MAC Đích thay đổi động ở từng chặng</strong> để trao tay gói tin qua từng thiết bị!"
           },
           en: {
-            title: "Step 9: Final Delivery from R2 (Port F0/2) to PC-C (172.10.20.5)! 🎉",
+            title: "Step 9: Final Delivery from R2 to PC-C (172.10.20.5)! 🎉",
             bubbles: {
-              n3: { text: "🚀 Sending final Frame out of F0/2 with Dest MAC = PC-C-MAC!", style: "" },
-              n4: { text: "🎉 Packet received! Both MAC (PC-C-MAC) and IP (172.10.20.5) match mine!", style: "b-done" }
+              n3: { text: "🚀 Sending final Frame with Dest MAC = PC-C-MAC!", style: "" },
+              n4: { text: "🎉 Packet received!", style: "b-done" }
             },
             macVal: "PC-C-MAC (PC-C)",
-            macDesc: "Final delivery complete! Destination IP (172.10.20.5) stayed constant, while Destination MAC changed at every hop!",
-            frameTxt: "[MAC: PC-C-MAC] + [IP: 172.10.20.5]",
-            note: "<strong>Step 9 — CORE TAKEAWAY:</strong> Across all 9 steps from PC-A through R1 and R2 to PC-C: the <strong>Destination IP (172.10.20.5) remained constant</strong> from start to end, while the <strong>Destination MAC changed dynamically at every hop</strong>!"
+            macDesc: "Delivered! Destination IP (172.10.20.5) stayed constant, while Destination MAC changed at every hop!",
+            note: "<strong>Step 9 — CORE TAKEAWAY:</strong> Across the entire journey, the <strong>Destination IP (172.10.20.5) NEVER changed</strong>, while the <strong>Destination MAC changed dynamically at every hop</strong>!"
           }
         }
       ]
     };
 
-    // =========================================================================
-    // LOGIC ĐIỀU KHIỂN & HIỂN THỊ
-    // =========================================================================
     const SPEEDS = {
       slow:   { move: 2200, wait: 4800 },
       normal: { move: 1300, wait: 3300 },
       fast:   { move: 700,  wait: 1800 }
     };
 
-    let currentScenario = "B"; // Mặc định mở Scenario B (hoặc người dùng bấm tab A/B)
+    let currentScenario = "B";
     let idx = 0;
     let lang = "vi";
     let playing = false;
@@ -1575,7 +1337,6 @@
       portF02.classList.toggle("hidden", isA);
 
       if (isA) {
-        // Bố cục Scenario A: PC-A (12%), Switch (43%), PC-B Target (73%), PC-D Other (90%)
         nodes.n1.style.left = "12%";
         nodes.n2.style.left = "43%";
         nodes.n3.style.left = "72%";
@@ -1585,13 +1346,13 @@
         document.getElementById("circle2").className = "node-circle";
         document.getElementById("circle2").textContent = "🔀";
         document.getElementById("title2").textContent = "Switch LAN";
-        document.getElementById("ip2").textContent = "192.168.1.0/24";
-        document.getElementById("mac2").textContent = "Layer 2 Switch";
+        document.getElementById("mac2").classList.add("hidden");
 
         document.getElementById("circle3").className = "node-circle";
         document.getElementById("icon3").textContent = "🖥️";
         document.getElementById("title3").textContent = lang === "vi" ? "PC-B (Đích)" : "PC-B (Target)";
         document.getElementById("ip3").textContent = "IP: 192.168.1.20";
+        document.getElementById("ip3").classList.remove("hidden");
         document.getElementById("mac3").textContent = "MAC: BB-02";
 
         document.getElementById("circle4").textContent = "💻";
@@ -1599,28 +1360,28 @@
         document.getElementById("ip4").textContent = "IP: 192.168.1.30";
         document.getElementById("mac4").textContent = "MAC: DD-03";
       } else {
-        // Bố cục Scenario B: PC-A (11%), Router R1 (37%), Router R2 (63%), PC-C (89%)
         nodes.n1.style.left = "11%";
         nodes.n2.style.left = "37%";
         nodes.n3.style.left = "63%";
         nodes.n4.style.left = "89%";
-        arpWidget.style.left = "20%";
-        routingWidget.style.left = "56%";
+        arpWidget.style.left = "22%";
+        routingWidget.style.left = "58%";
 
         document.getElementById("circle2").className = "node-circle router";
         document.getElementById("circle2").textContent = "🧭";
         document.getElementById("title2").textContent = "Router R1";
-        document.getElementById("ip2").textContent = "GW: 192.168.1.1";
+        document.getElementById("mac2").classList.remove("hidden");
         document.getElementById("mac2").textContent = "MAC: R1-MAC";
 
         document.getElementById("circle3").className = "node-circle router";
         document.getElementById("icon3").textContent = "🧭";
         document.getElementById("title3").textContent = "Router R2";
-        document.getElementById("ip3").textContent = "F0/2: 172.10.20.1";
+        document.getElementById("ip3").classList.add("hidden");
         document.getElementById("mac3").textContent = "MAC: R2-MAC";
 
+        document.getElementById("circle4").textContent = "🖥️";
         document.getElementById("title4").textContent = lang === "vi" ? "PC-C (Đích)" : "PC-C (Dest)";
-        document.getElementById("ip4").textContent = "IP: 172.10.20.5 (/24)";
+        document.getElementById("ip4").textContent = "IP: 172.10.20.5";
         document.getElementById("mac4").textContent = "MAC: PC-C-MAC";
       }
 
@@ -1661,17 +1422,12 @@
       document.getElementById("spdNorm").textContent = t.spdNorm;
       document.getElementById("spdFast").textContent = t.spdFast;
 
-      document.getElementById("lblLayer1").textContent = t.layer1;
-      document.getElementById("lblLayer2").textContent = t.layer2;
-      document.getElementById("lblLayer3").textContent = t.layer3;
-
       document.getElementById("lblInspectorHeading").textContent = t.inspectorHeading;
       document.getElementById("lblIpCardTitle").textContent = t.ipCardTitle;
       document.getElementById("lblIpCardBadge").textContent = t.ipCardBadge;
       document.getElementById("lblIpCardDesc").innerHTML = t.ipCardDesc;
       document.getElementById("lblMacCardTitle").textContent = t.macCardTitle;
       document.getElementById("lblMacCardBadge").textContent = t.macCardBadge;
-      document.getElementById("lblSummaryHeading").textContent = t.summaryHeading;
 
       document.getElementById("routingWidgetTitle").textContent = t.routingTitle;
       document.getElementById("routingWidgetVal").textContent = t.routingRule;
@@ -1753,12 +1509,6 @@
         document.getElementById("arpWidgetVal").textContent = s.arpTable[lang].val;
       }
 
-      // Encapsulation Bar
-      document.getElementById("txtFrame").textContent = content.frameTxt;
-      document.getElementById("boxBits").classList.toggle("active", s.wireActive);
-      document.getElementById("boxSignals").classList.toggle("active", s.wireActive);
-      document.getElementById("waveSvg").classList.toggle("moving", s.wireActive);
-
       // Inspector MAC Card
       const macCard = document.getElementById("macCard");
       macCard.classList.remove("pulse");
@@ -1767,19 +1517,6 @@
 
       document.getElementById("valMac").textContent = content.macVal;
       document.getElementById("descMac").textContent = content.macDesc;
-
-      // Summary List
-      const sumContainer = document.getElementById("summaryList");
-      sumContainer.innerHTML = "";
-      scen.summaryItems[lang].forEach((item, i) => {
-        const order = i + 1;
-        const row = document.createElement("div");
-        row.className = "summary-item";
-        if (order < s.sumIdx) row.classList.add("done");
-        if (order === s.sumIdx) row.classList.add("active");
-        row.innerHTML = `<span>${item.label}</span><span>${item.mac}</span>`;
-        sumContainer.appendChild(row);
-      });
 
       // Teacher Note
       document.getElementById("teacherText").innerHTML = content.note;
